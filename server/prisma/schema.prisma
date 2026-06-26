@@ -1,0 +1,158 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  role      String   @default("user")
+  baskets   Basket[]
+  ratings   Rating[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("user")
+}
+
+model Basket {
+  id     Int       @id @default(autoincrement())
+  userId Int
+  paidAt DateTime?
+
+  deliveryOptionId Int?
+  deliveryOption   DeliveryOption? @relation(fields: [deliveryOptionId], references: [id])
+  deliveredAt      DateTime?
+
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  devices   BasketDevice[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  // Индекс для быстрого поиска активных корзин пользователя
+  @@index([userId, paidAt])
+  @@map("basket")
+}
+
+model BasketDevice {
+  id       Int    @id @default(autoincrement())
+  basketId Int
+  deviceId Int
+  quantity Int    @default(1)
+  basket   Basket @relation(fields: [basketId], references: [id], onDelete: Cascade)
+  device   Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  @@unique([basketId, deviceId])
+  @@map("basket_device")
+}
+
+model Rating {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  deviceId    Int
+  rate        Int
+  description String?
+  hidden      Boolean  @default(false)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  device      Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@unique([userId, deviceId])
+  @@map("rating")
+}
+
+model Type {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  devices Device[]
+
+  @@map("type")
+}
+
+model Brand {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  devices Device[]
+
+  @@map("brand")
+}
+
+model Device {
+  id           Int            @id @default(autoincrement())
+  name         String
+  price        Decimal        @db.Decimal(10, 2)
+  rating       Decimal?       @db.Decimal(3, 2)
+  img          String?
+  typeId       Int
+  brandId      Int
+  type         Type           @relation(fields: [typeId], references: [id])
+  brand        Brand          @relation(fields: [brandId], references: [id])
+  basketItems  BasketDevice[]
+  ratings      Rating[]
+  deviceInfos  DeviceInfo[]
+  deviceImages DeviceImage[]
+  discounts    Discount[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@map("device")
+}
+
+model DeviceInfo {
+  id          Int      @id @default(autoincrement())
+  deviceId    Int
+  device      Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("device_info")
+}
+
+model DeviceImage {
+  id        Int      @id @default(autoincrement())
+  deviceId  Int
+  img       String
+  device    Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("device_image")
+}
+
+model Discount {
+  id        Int      @id @default(autoincrement())
+  deviceId  Int
+  value     Decimal  @db.Decimal(5, 2) // Процент скидки (15.00 = 15%)
+  dateStart DateTime
+  dateEnd   DateTime
+  device    Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([deviceId])
+  @@index([dateStart, dateEnd])
+  @@map("discount")
+}
+
+model DeliveryOption {
+  id          Int      @id @default(autoincrement())
+  name        String
+  type        String
+  price       Decimal? @db.Decimal(10, 2)
+  address     String?  @db.Text
+  description String?  @db.Text
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+
+  baskets   Basket[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("delivery_option")
+}

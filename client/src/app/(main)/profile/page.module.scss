@@ -1,0 +1,1048 @@
+/* ───────── ОСНОВНЫЕ СТИЛИ ───────── */
+.profile {
+  min-height: calc(100vh - 200px);
+  padding: 2rem 1rem;
+  background: var(--color-background);
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  color: var(--color-text);
+  text-align: center;
+}
+
+/* ───────── ВКЛАДКИ ───────── */
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  background: var(--color-surface);
+  padding: 0.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-border);
+}
+
+.tab {
+  flex: 1;
+  padding: 0.75rem;
+  background: none;
+  border: none;
+  border-radius: 0.5rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover { 
+    color: var(--color-text); 
+    background: var(--color-surface-hover); 
+  }
+}
+
+.active {
+  background: var(--color-primary);
+  color: white;
+  
+  &:hover { 
+    background: var(--color-primary); 
+    color: white; 
+  }
+}
+
+/* ───────── ОБЩИЕ СТИЛИ КАРТОЧЕК ───────── */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.formCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loading, .empty, .error {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-text-muted);
+}
+
+.error { 
+  color: var(--color-error); 
+}
+
+/* ──────── СЕТКА ТОВАРОВ ───────── */
+.gridHead {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr auto;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--color-border);
+  
+  &:last-child { 
+    border-bottom: none; 
+  }
+}
+
+.info { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 0.2rem; 
+}
+
+.name { 
+  font-weight: 600; 
+  color: var(--color-text); 
+  font-size: 0.95rem; 
+}
+
+.meta { 
+  font-size: 0.8rem; 
+  color: var(--color-text-muted); 
+}
+
+.controls { 
+  display: flex; 
+  align-items: center; 
+  gap: 0.4rem; 
+  justify-content: center; 
+}
+
+.btnQty {
+  width: 28px; 
+  height: 28px;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 0.4rem;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: 0.2s;
+  
+  &:hover:not(:disabled) { 
+    background: var(--color-primary); 
+    border-color: var(--color-primary); 
+    color: white; 
+  }
+  
+  &:disabled { 
+    opacity: 0.4; 
+    cursor: not-allowed; 
+  }
+}
+
+.qty { 
+  font-weight: 600; 
+  text-align: center; 
+  min-width: 20px; 
+}
+
+/* ✅ Обновлённый .price — поддерживает несколько строк для скидки */
+.price { 
+  text-align: right; 
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.15rem;
+}
+
+.price.priceWithDiscount {
+  gap: 0.1rem;
+}
+
+.originalPrice {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  text-decoration: line-through;
+  line-height: 1;
+}
+
+.discountedPrice {
+  font-weight: 600;
+  color: var(--color-text);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.discountBadge {
+  background: var(--color-primary);
+  color: white;
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1;
+  align-self: flex-end;
+}
+
+.total { 
+  text-align: right; 
+  font-weight: 600; 
+  color: var(--color-primary); 
+}
+
+.btnDel {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  width: 28px; 
+  height: 28px;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  
+  &:hover { 
+    border-color: var(--color-error); 
+    color: var(--color-error); 
+    background: rgba(239, 68, 68, 0.1); 
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.25rem;
+  margin-top: 0.75rem;
+  border-top: 2px solid var(--color-border);
+  
+  span { 
+    font-size: 1rem; 
+    color: var(--color-text-muted); 
+    
+    strong { 
+      color: var(--color-text); 
+      font-size: 1.25rem; 
+      margin-left: 0.5rem; 
+    } 
+  }
+}
+
+.checkoutBtn {
+  background: #16a34a; 
+  color: white; 
+  padding: 0.65rem 1.75rem;
+  border: none; 
+  border-radius: 0.5rem; 
+  font-weight: 600; 
+  cursor: pointer; 
+  transition: background 0.2s;
+  
+  &:hover:not(:disabled) { 
+    background: #4ade80; 
+  }
+  
+  &:disabled { 
+    opacity: 0.6; 
+    cursor: not-allowed; 
+  }
+}
+
+.cancelBtn {
+  background: #ffffff; 
+  color: #000000; 
+  padding: 0.65rem 1.75rem;
+  border: 1px solid var(--color-border); 
+  border-radius: 0.5rem; 
+  font-weight: 600; 
+  cursor: pointer; 
+  transition: all 0.2s;
+  
+  &:hover:not(:disabled) { 
+    background: #f0f0f0; 
+    color: #1e40af; 
+    border-color: #1e40af; 
+  }
+  
+  &:disabled { 
+    opacity: 0.6; 
+    cursor: not-allowed; 
+  }
+}
+
+.ordersList { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 1.25rem; 
+}
+
+.orderCard {
+  background: var(--color-background); 
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem; 
+  padding: 1.25rem;
+}
+
+.orderHeader {
+  display: flex; 
+  align-items: center; 
+  padding-bottom: 0.75rem; 
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+  
+  span { 
+    font-size: 1rem; 
+    color: var(--color-text-muted); 
+    
+    strong { 
+      color: var(--color-text); 
+      font-weight: 600; 
+      margin-left: 0.3rem; 
+    } 
+  }
+}
+
+.orderRows { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 0.5rem; 
+}
+
+/* ───────── ФОРМА ПАРОЛЯ ───────── */
+.formTitle { 
+  margin: 0 0 1.5rem; 
+  font-size: 1.25rem; 
+}
+
+.passForm { 
+  width: 100%; 
+  max-width: 400px; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 1rem; 
+}
+
+.submitBtn {
+  width: 100%; 
+  padding: 0.85rem; 
+  background: var(--color-primary); 
+  color: white;
+  border: none; 
+  border-radius: 0.5rem; 
+  font-weight: 600; 
+  cursor: pointer; 
+  transition: 0.2s;
+  
+  &:hover:not(:disabled) { 
+    background: var(--color-primary-hover); 
+  }
+  
+  &:disabled { 
+    opacity: 0.6; 
+    cursor: not-allowed; 
+  }
+}
+
+.formCard { 
+  text-align: initial; 
+}
+
+.formCard .passForm :global(.field) {
+  text-align: left !important; 
+  width: 100%; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: flex-start;
+}
+
+.formCard .passForm :global(.label) {
+  text-align: left !important; 
+  display: block; 
+  margin-bottom: 0.4rem; 
+  width: 100%;
+}
+
+.formCard .passForm :global(.fieldInput) {
+  text-align: left !important; 
+  width: 100%;
+}
+
+.formCard .passForm :global(.message) {
+  text-align: left !important; 
+  justify-content: flex-start !important; 
+  width: 100%;
+}
+
+.formCard .passForm .submitBtn { 
+  align-self: center; 
+  width: auto; 
+  min-width: 200px; 
+}
+
+/* ───────── АДМИН: УПРАВЛЕНИЕ ───────── */
+.managementGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.mgmtCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.mgmtTitle { 
+  margin: 0; 
+  font-size: 1.1rem; 
+  color: var(--color-text); 
+}
+
+.mgmtDesc { 
+  margin: 0; 
+  font-size: 0.9rem; 
+  color: var(--color-text-muted); 
+  flex: 1; 
+}
+
+.mgmtLink {
+  display: inline-block; 
+  padding: 0.5rem 1rem; 
+  background: var(--color-primary); 
+  color: white;
+  border-radius: 0.5rem; 
+  text-decoration: none; 
+  font-weight: 500; 
+  font-size: 0.9rem; 
+  text-align: center; 
+  transition: background 0.2s;
+  
+  &:hover { 
+    background: var(--color-primary-hover); 
+  }
+}
+
+/* ───────── АДМИН: СТАТИСТИКА ───────── */
+.statsContainer {
+  display: flex; 
+  flex-direction: column; 
+  gap: 1.5rem;
+}
+
+.summaryContainer {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.dashboardGrid {
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+  gap: 1rem;
+}
+
+.statCard {
+  background: var(--color-background); 
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem; 
+  padding: 1.25rem; 
+  text-align: center; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 0.4rem;
+}
+
+.statValue { 
+  font-size: 1.5rem; 
+  font-weight: 700; 
+  color: var(--color-text); 
+}
+
+.statValue.positive { 
+  color: var(--color-success); 
+}
+
+.statLabel { 
+  font-size: 0.85rem; 
+  color: var(--color-text-muted); 
+}
+
+.controlGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 220px;
+  
+  label {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  
+  :global([class*="customSelect"]),
+  > div:last-child {
+    flex: 1;
+    min-width: 180px;
+  }
+}
+
+.statsControls {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2rem;
+  flex-wrap: wrap;
+  
+  .controlGroup {
+    flex: 0 0 auto;
+    min-width: auto;
+  }
+}
+
+.dateRangeMenu {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2rem;
+  flex-wrap: wrap;
+  
+  .controlGroup {
+    flex: 1;
+    min-width: 200px;
+  }
+}
+
+.dateRange {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 280px;
+  
+  > div {
+    flex: 1;
+    min-width: 120px;
+  }
+}
+
+.dateSeparator {
+  color: var(--color-text-muted);
+  font-size: 1.4rem;
+  font-weight: 300;
+  user-select: none;
+  margin: 0 0.25rem;
+  flex-shrink: 0;
+}
+
+.chartToggles { 
+  display: flex; 
+  gap: 0.4rem; 
+}
+
+.toggleBtn {
+  padding: 0.4rem 0.9rem; 
+  background: var(--color-background); 
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem; 
+  color: var(--color-text-muted); 
+  font-size: 0.85rem; 
+  cursor: pointer; 
+  transition: all 0.2s;
+  
+  &:hover:not(.toggleActive) { 
+    border-color: var(--color-primary); 
+    color: var(--color-text); 
+  }
+}
+
+.toggleActive { 
+  background: var(--color-primary); 
+  color: white; 
+  border-color: var(--color-primary); 
+}
+
+.chartWrapper {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  min-height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+/* ───────── АДАПТИВ ─────── */
+@media (max-width: 768px) {
+  .gridHead, .row { 
+    grid-template-columns: 1.5fr 0.8fr 0.8fr 1fr auto; 
+    gap: 0.5rem; 
+    font-size: 0.85rem; 
+  }
+  
+  .meta { 
+    display: none; 
+  }
+  
+  .footer { 
+    flex-direction: column; 
+    gap: 1rem; 
+    text-align: center; 
+  }
+  
+  .checkoutBtn { 
+    width: 100%; 
+  }
+  
+  .statsControls, .dateRangeMenu {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  
+  .dateRange {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .dashboardGrid { 
+    grid-template-columns: repeat(2, 1fr); 
+  }
+  
+  .chartWrapper { 
+    min-height: 300px; 
+  }
+  
+  /* ✅ Адаптив для цен со скидкой */
+  .price.priceWithDiscount {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+  
+  .originalPrice {
+    font-size: 0.8rem;
+  }
+  
+  .discountedPrice {
+    font-size: 0.9rem;
+  }
+  
+  .discountBadge {
+    align-self: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboardGrid { 
+    grid-template-columns: 1fr; 
+  }
+  
+  .statValue { 
+    font-size: 1.25rem; 
+  }
+  
+  .chartWrapper { 
+    min-height: 250px; 
+    padding: 1rem; 
+  }
+}
+
+/* ✅ Выбор доставки в корзине */
+.deliverySelect {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.deliveryLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  
+  span {
+    white-space: nowrap;
+  }
+}
+
+.deliverySelectInput {
+  padding: 0.5rem 0.75rem;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 0.4rem;
+  color: var(--color-text);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.deliveryLoading {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.footerActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.totalLabel {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  
+  strong {
+    color: var(--color-text);
+    font-size: 1.25rem;
+    margin-left: 0.25rem;
+  }
+}
+
+/* ✅ Информация о доставке в истории заказов */
+.orderHeader {
+  display: flex;
+  align-items: center;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  
+  > span:first-child {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    
+    strong {
+      color: var(--color-text);
+      font-weight: 600;
+      margin-left: 0.3rem;
+    }
+  }
+}
+
+.deliveryType {
+  font-size: 0.9rem;
+  color: var(--color-text);
+  font-weight: 500;
+  background: var(--color-surface-hover);
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.4rem;
+  border: 1px solid var(--color-border);
+}
+
+.deliveryStatus {
+  font-size: 0.85rem;
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+/* ✅ Адаптив */
+@media (max-width: 768px) {
+  .footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  
+  .deliverySelect {
+    justify-content: center;
+  }
+  
+  .footerActions {
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .orderHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+  
+  .deliveryType, .deliveryStatus {
+    align-self: flex-start;
+  }
+}
+
+/* ✅ Контейнер для CustomSelect с поддержкой disabled-состояния */
+.deliverySelectContainer {
+  display: inline-block;
+  transition: opacity 0.2s;
+  
+  &.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+/* ✅ Стили для самого CustomSelect */
+.deliveryCustomSelect {
+  min-width: 200px;
+}
+
+/* ✅ Глобальные стили переопределения компонента (ВЫНЕСЕНЫ НА ВЕРХНИЙ УРОВЕНЬ!) */
+
+:global(.custom-select) {
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 0.4rem;
+  color: var(--color-text);
+  font-size: 0.9rem;
+  padding: 0.5rem 0.75rem;
+  
+  &:focus {
+    border-color: var(--color-primary);
+    outline: none;
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+:global(.custom-select__menu) {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.4rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+:global(.custom-select__option) {
+  color: var(--color-text);
+  padding: 0.5rem 0.75rem;
+  
+  &:hover {
+    background: var(--color-surface-hover);
+  }
+}
+
+/* ✅ Активная опция — полный селектор без вложенности */
+:global(.custom-select__option--is-selected) {
+  background: var(--color-primary);
+  color: white;
+}
+
+/* ✅ Disabled опция */
+:global(.custom-select__option:disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ✅ Новый футер: левая и правая части */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.25rem;
+  margin-top: 0.75rem;
+  border-top: 2px solid var(--color-border);
+}
+
+.totalLabel {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  
+  strong {
+    color: var(--color-text);
+    font-size: 1.25rem;
+    margin-left: 0.25rem;
+  }
+}
+
+.footerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* ✅ Адаптив для нового футера */
+@media (max-width: 768px) {
+  .footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  
+  .footerActions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  
+  .deliverySelectWrapper {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .deliveryCustomSelect {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .checkoutBtn {
+    width: 100%;
+  }
+}
+
+/* ✅ Статус доставки в истории (• и + вместо эмодзи) */
+.deliveryStatus {
+  font-size: 0.85rem;
+  font-weight: 500;
+  
+  /* Цвет для ожидающих статусов */
+  &:has([data-status="pending"]) {
+    color: var(--color-text-muted);
+  }
+  
+  /* Цвет для завершённых статусов */
+  &:has([data-status="completed"]) {
+    color: var(--color-success);
+  }
+}
+
+.orderActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.receiptBtn {
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  
+  &:hover {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+}
+
+.statsControls {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2rem;
+  flex-wrap: wrap;
+  
+  .controlGroup {
+    flex: 0 0 auto;
+    min-width: auto;
+  }
+}
+
+/* ✅ Кнопка "Отчёт" — прижата вправо */
+.reportBtn {
+  margin-left: auto; /* ✅ Прижимаем к правому краю */
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+  
+  &:hover:not(:disabled) {
+    background: var(--color-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+/* ✅ Адаптив для кнопки отчёта */
+@media (max-width: 768px) {
+  .statsControls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  
+  .reportBtn {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+}

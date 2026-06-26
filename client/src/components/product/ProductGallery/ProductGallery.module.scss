@@ -1,0 +1,316 @@
+.gallery {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Контейнер для основного изображения с кнопками */
+.mainImageContainer {
+  position: relative;
+}
+
+.mainImageWrap {
+  background: #111;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: zoom-in;
+  position: relative;
+  
+  &:hover .zoomHint {
+    opacity: 1;
+  }
+}
+
+.mainImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 1rem;
+  transition: transform 0.2s ease;
+  
+  &.zoomed {
+    transform: scale(2);
+    cursor: zoom-out;
+  }
+}
+
+.zoomHint {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.4rem;
+  font-size: 0.8rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+/* ✅ Кнопки навигации */
+.navBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background: rgba(20, 20, 20, 0.7);
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  color: var(--color-text);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 2;
+  
+  &:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+  }
+  
+  &.prev { left: 0.5rem; }
+  &.next { right: 0.5rem; }
+}
+
+/* ✅ Новая панель миниатюр */
+.thumbnailsBar {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+}
+
+/* Миниатюра основного изображения с серой обводкой */
+.mainThumb {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  border: 1px solid var(--color-border); /* ✅ Серая обводка */
+}
+
+.thumbLabel {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* Контейнер для доп. миниатюр со скроллом */
+.extraThumbnails {
+  flex: 1;
+  min-width: 0;
+}
+
+.extraThumbnailsScroll {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.25rem 0;
+  
+  /* ✅ Единые стили скроллбара как во всём проекте */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+  
+  &::-webkit-scrollbar {
+    height: 5px; /* Как в specsScroll */
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px; /* Как в specsScroll */
+    &:hover {
+      background: var(--color-primary);
+    }
+  }
+}
+
+/* Общие стили миниатюр */
+.thumb {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 0.4rem;
+  overflow: hidden;
+  border: 2px solid transparent;
+  background: #111;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  
+  &:hover, &.thumbActive {
+    border-color: var(--color-primary);
+    transform: scale(1.05);
+  }
+  
+  &.thumbActive {
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+  }
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+/* Полноэкранный режим */
+.fullscreen {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  animation: fadeIn 0.2s ease;
+  overflow: auto;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.closeBtn {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.fullscreenImage {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 0.5rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.fullscreenNav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  z-index: 1;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  &.prev { left: 2rem; }
+  &.next { right: 2rem; }
+}
+
+.fullscreenCounter {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.9rem;
+}
+
+.placeholderWrap {
+  background: #111;
+  border-radius: 0.75rem;
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.placeholderIcon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  opacity: 0.7;
+  filter: grayscale(30%);
+}
+
+.placeholderText {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+/* ✅ Адаптив */
+@media (max-width: 600px) {
+  .navBtn {
+    width: 34px;
+    height: 34px;
+    font-size: 1rem;
+    &.prev { left: 0.25rem; }
+    &.next { right: 0.25rem; }
+  }
+  
+  .thumbnailsBar {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .extraThumbnailsScroll {
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .thumb {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .fullscreenNav {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    &.prev { left: 1rem; }
+    &.next { right: 1rem; }
+  }
+}

@@ -1,0 +1,34 @@
+.patternOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+.patternOverlay.visible {
+  opacity: 1;
+}
+
+.pattern {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(15, 15, 15, 0.8) 70%);
+}
+
+.gradientFade {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 0%, var(--color-background) 70%);
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .pattern {
+    background-size: 60px 60px;
+  }
+}

@@ -1,0 +1,332 @@
+.reviewsBlock {
+  background: var(--color-surface);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid var(--color-border);
+}
+
+.reviewsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.sectionTitle { 
+  font-size: 1.15rem; 
+  margin: 0; 
+}
+
+.sortButtons { 
+  display: flex; 
+  gap: 0.4rem; 
+  flex-wrap: wrap; 
+}
+
+.sortBtn {
+  padding: 0.4rem 0.8rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  
+  &:hover:not(.sortBtnActive) { 
+    border-color: var(--color-primary); 
+    color: var(--color-text); 
+  }
+}
+
+.sortBtnActive { 
+  background: var(--color-primary); 
+  color: white; 
+  border-color: var(--color-primary); 
+}
+
+.reviewsList { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 0.85rem; 
+}
+
+.reviewCard {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  border-bottom: 1px solid var(--color-primary);
+  border-radius: 0;
+
+  &:first-of-type { border-top: none !important; }
+  &:last-of-type { border-bottom: none !important; }
+}
+
+.reviewTop {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+.reviewAuthor { 
+  font-weight: 600; 
+  color: var(--color-text); 
+}
+
+.reviewDate { 
+  color: var(--color-text-muted); 
+}
+
+.reviewRating {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+}
+
+.ratingDots {
+  color: var(--color-border);
+  letter-spacing: 3px;
+  font-size: 0.75rem;
+  transition: color 0.2s ease;
+}
+
+.ratingDots.active {
+  color: var(--color-primary);
+}
+
+.reviewText { 
+  margin: 0; 
+  color: var(--color-text); 
+  line-height: 1.45; 
+  font-size: 0.9rem; 
+}
+
+.reviewHiddenText {
+  color: var(--color-text-muted);
+  font-style: italic;
+  font-size: 0.9rem;
+  margin: 0.25rem 0;
+}
+
+.toggleHiddenBtn {
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.4rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-left: auto;
+  
+  &:hover:not(:disabled) {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+  
+  &.hidden {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    
+    &:hover {
+      background: rgba(59, 130, 246, 0.2);
+    }
+  }
+}
+
+.myReviewHiddenNote {
+  display: inline-block;
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  color: var(--color-error);
+  background: rgba(239, 68, 68, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.3rem;
+  align-self: flex-end;
+}
+
+/* Форма отзыва */
+.reviewForm {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formTitle { 
+  margin: 0; 
+  font-size: 1.1rem; 
+}
+
+.formMsg { 
+  padding: 0.75rem; 
+  border-radius: 0.5rem; 
+  font-size: 0.9rem; 
+  text-align: center; 
+  margin: 0; 
+  
+  &.success { 
+    background: rgba(34, 197, 94, 0.1); 
+    color: var(--color-success); 
+  }
+  
+  &.error { 
+    background: rgba(239, 68, 68, 0.1); 
+    color: var(--color-error); 
+  }
+}
+
+.formHiddenNote {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--color-error);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.4rem;
+  font-size: 0.85rem;
+  margin: 0.5rem 0;
+  text-align: center;
+  flex: 1 1 100%;
+}
+
+.formRow { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 0.5rem; 
+  
+  label { 
+    font-size: 0.85rem; 
+    color: var(--color-text-muted); 
+  }
+}
+
+.dotsSelect {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.dotBtn {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: var(--color-border);
+  transition: color 0.15s, transform 0.15s;
+  padding: 0;
+  line-height: 1;
+  user-select: none;
+  
+  &.dotActive {
+    color: var(--color-primary);
+  }
+  
+  &:hover {
+    transform: scale(1.15);
+  }
+}
+
+.dotValue {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-left: 0.4rem;
+  min-width: 45px;
+}
+
+.submitReviewBtn {
+  align-self: flex-start; 
+  padding: 0.6rem 1.5rem; 
+  background: var(--color-primary); 
+  color: white;
+  border: none; 
+  border-radius: 0.5rem; 
+  font-weight: 500; 
+  cursor: pointer; 
+  transition: background 0.2s;
+  
+  &:hover:not(:disabled) { 
+    background: var(--color-primary-hover); 
+  }
+  
+  &:disabled { 
+    opacity: 0.6; 
+    cursor: not-allowed; 
+  }
+}
+
+.formHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.deleteBtn {
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  padding: 0.35rem 0.8rem;
+  border-radius: 0.4rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  
+  &:hover:not(:disabled) {
+    border-color: var(--color-error);
+    color: var(--color-error);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.empty {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  background: var(--color-bg);
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
+/* Адаптив */
+@media (max-width: 600px) {
+  .reviewsHeader { 
+    flex-direction: column; 
+    align-items: flex-start; 
+  }
+  .sortButtons { 
+    width: 100%; 
+  }
+  .sortBtn { 
+    flex: 1; 
+    text-align: center; 
+  }
+  .reviewTop { 
+    flex-direction: column; 
+    gap: 0.2rem; 
+  }
+  .formHeader { 
+    flex-direction: column; 
+    align-items: flex-start; 
+    gap: 0.5rem; 
+  }
+  .deleteBtn, .formHiddenNote { 
+    align-self: flex-end; 
+  }
+}

@@ -1,0 +1,128 @@
+.container { 
+  animation: fadeIn 0.3s ease;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem;
+  padding-bottom: 100px;
+}
+
+.header { 
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding: 0 0.5rem;
+  h1 { margin: 0; font-size: 1.5rem; color: var(--color-text); } 
+}
+
+.filters {
+  display: grid; grid-template-columns: 1.5fr 1fr; gap: 0.75rem; margin-bottom: 1rem; padding: 0.75rem 1rem;
+  background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 0.75rem;
+  .search {
+    padding: 0.5rem 0.75rem; background: var(--color-background); border: 1px solid var(--color-border);
+    border-radius: 0.4rem; color: var(--color-text); font-size: 0.9rem; width: 100%;
+    &::placeholder { color: var(--color-text-muted); }
+    &:focus { outline: none; border-color: var(--color-primary); }
+  }
+}
+
+.tableWrapper { 
+  background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 1rem; overflow: hidden; overflow-x: auto;
+}
+
+.table { 
+  width: 100%; border-collapse: collapse; min-width: 1000px;
+  th { 
+    background: var(--color-background); padding: 1rem; text-align: left; font-weight: 600; 
+    color: var(--color-text); border-bottom: 1px solid var(--color-border); font-size: 0.9rem;
+  }
+  td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--color-border); vertical-align: middle; font-size: 0.9rem; }
+  tr:last-child td { border-bottom: none; } 
+  .rowActive td { background: rgba(59, 130, 246, 0.05); } 
+}
+
+.sortable { position: relative; padding-right: 1.5rem; cursor: pointer; user-select: none; transition: background 0.2s;
+  &:hover { background: var(--color-surface-hover); .sortIcon { opacity: 1; } } 
+}
+.sortIcon { position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: var(--color-text-muted); opacity: 0.5; transition: opacity 0.2s; }
+
+.expandBtn { 
+  background: none; border: none; cursor: pointer; font-size: 1rem; color: var(--color-text-muted); 
+  padding: 0.2rem; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 0.3rem;
+  &:hover { background: var(--color-surface-hover); color: var(--color-text); }
+}
+
+.ratingCell { text-align: center; color: var(--color-primary); font-weight: 500; letter-spacing: 2px; }
+
+.statusBadge { display: inline-block; padding: 0.25rem 0.6rem; border-radius: 0.4rem; font-size: 0.75rem; font-weight: 500; }
+.statusVisible { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
+.statusHidden { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+
+.actionsHeader { text-align: right !important; padding-right: 1.5rem; }
+.actionsCell { text-align: right !important; padding-right: 1rem; }
+
+.toggleBtn {
+  padding: 0.3rem 0.7rem; border: 1px solid var(--color-border); border-radius: 0.4rem;
+  background: var(--color-background); color: var(--color-text); font-size: 0.8rem; cursor: pointer; transition: all 0.2s;
+  &:hover:not(:disabled) { border-color: var(--color-primary); color: var(--color-primary); }
+  &.hide { border-color: var(--color-error); color: var(--color-error); &:hover:not(:disabled) { background: rgba(239, 68, 68, 0.1); } }
+  &.show { border-color: #22c55e; color: #22c55e; &:hover:not(:disabled) { background: rgba(34, 197, 94, 0.1); } }
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+}
+
+.expandRow td { padding: 0; background: var(--color-surface-hover); border-bottom: 1px solid var(--color-border); }
+.expandContent { padding: 1.25rem; }
+
+.reviewDescription { margin-bottom: 1rem; }
+.descriptionText { 
+  margin-top: 0.5rem; padding: 0.75rem; background: var(--color-background); 
+  border-radius: 0.4rem; font-size: 0.9rem; line-height: 1.5; color: var(--color-text);
+}
+
+.reviewMeta { 
+  display: flex; gap: 2rem; font-size: 0.85rem; color: var(--color-text-muted); flex-wrap: wrap;
+  span { display: inline-flex; align-items: center; gap: 0.3rem; }
+}
+
+/* ✅ Пагинация */
+.paginationWrapper {
+  position: sticky; bottom: 1.5rem; z-index: 45; margin-top: auto;
+  width: calc(100% - 2rem); max-width: 400px; display: grid; grid-template-columns: auto 1fr auto; align-items: center;
+  background: rgba(30, 30, 30, 0.5); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  padding: 0.4rem 0.75rem; border-radius: 0.6rem; border: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: 44px; transition: all 0.3s ease; opacity: 0.85; margin: 0 auto;
+  &:hover, &:focus-within { opacity: 1; background: rgba(40, 40, 40, 0.8); border-color: rgba(59, 130, 246, 0.4); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25); }
+}
+.limitButtons { display: flex; gap: 0.3rem; align-items: center; }
+.limitBtn {
+  padding: 0.3rem 0.7rem; background: rgba(255, 255, 255, 0.1); border: 1px solid transparent; border-radius: 0.4rem;
+  color: var(--color-text-muted); font-size: 0.8rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease;
+  &:hover:not(.limitBtnActive) { background: rgba(255, 255, 255, 0.2); color: var(--color-text); }
+  &.limitBtnActive { background: var(--color-primary); color: white; border-color: var(--color-primary); }
+}
+.pagination { display: flex; align-items: center; justify-content: flex-end; gap: 0.75rem; }
+.pageBtn {
+  background: rgba(255, 255, 255, 0.1); color: var(--color-text); padding: 0.35rem 0.85rem; border-radius: 0.4rem;
+  transition: all 0.2s ease; font-size: 0.85rem; font-weight: 500; border: 1px solid transparent; cursor: pointer;
+  &:disabled { opacity: 0.3; cursor: not-allowed; } 
+  &:hover:not(:disabled) { background: var(--color-primary); color: white; border-color: var(--color-primary); } 
+}
+.pageInfo { color: var(--color-text); font-size: 0.85rem; font-weight: 500; min-width: 70px; text-align: center; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ✅ Адаптив */
+@media (max-width: 768px) {
+  .filters { grid-template-columns: 1fr; }
+  .search { grid-column: auto; }
+  .table { min-width: 800px; font-size: 0.85rem; }
+  
+  .actionsCell { text-align: center !important; padding: 0.5rem; }
+  .toggleBtn { width: 100%; max-width: 100px; }
+  
+  .reviewMeta { gap: 1rem; }
+  
+  .paginationWrapper { 
+    grid-template-columns: 1fr; text-align: center; width: calc(100% - 1.5rem); padding: 0.35rem 0.6rem; min-height: 40px;
+  }
+  .limitButtons { justify-content: center; margin-bottom: 0.25rem; }
+  .pagination { justify-self: center; gap: 0.5rem; }
+  .pageInfo { min-width: 60px; font-size: 0.8rem; }
+  .pageBtn { padding: 0.3rem 0.7rem; font-size: 0.8rem; }
+}

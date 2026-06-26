@@ -1,0 +1,209 @@
+.catalog { 
+  max-width: 1200px; 
+  margin: 0 auto; 
+  padding: 0 1rem 1rem;
+  display: flex; 
+  flex-direction: column; 
+  gap: 1.5rem; 
+  min-height: 100vh;
+  margin-top: 4rem;
+}
+
+/* ───────── ФИЛЬТРЫ (Glass + Sticky) ───────── */
+.filters {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 0.75rem;
+  background: rgba(30, 30, 30, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 5rem;
+  z-index: 40;
+  transition: all 0.3s ease;
+  
+  &:hover, &:focus-within {
+    background: rgba(40, 40, 40, 0.85);
+    border-color: rgba(59, 130, 246, 0.4);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.search {
+  padding: 0.5rem 0.75rem;
+  background: rgba(20, 20, 20, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  color: var(--color-text);
+  font-size: 0.9rem;
+  width: 100%;
+  transition: all 0.2s ease;
+  &::placeholder { color: var(--color-text-muted); }
+  &:focus { outline: none; border-color: var(--color-primary); background: rgba(20, 20, 20, 0.8); }
+}
+
+/* ───────── ПАГИНАЦИЯ (Sticky + Glass + Buttons) ───────── */
+.paginationWrapper {
+  position: sticky;
+  bottom: 1.5rem;
+  z-index: 45;
+  margin-top: auto;
+  
+  width: calc(100% - 2rem);
+  max-width: 600px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  
+  background: rgba(30, 30, 30, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  
+  min-height: 44px;
+  transition: all 0.3s ease;
+  opacity: 0.85;
+  margin: 0 auto;
+  
+  &:hover, &:focus-within {
+    opacity: 1;
+    background: rgba(40, 40, 40, 0.8);
+    border-color: rgba(59, 130, 246, 0.4);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  }
+}
+
+/* Кнопки выбора лимита (горизонтальные, как в сортировке отзывов) */
+.limitButtons {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.limitBtn {
+  padding: 0.3rem 0.7rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid transparent;
+  border-radius: 0.4rem;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover:not(.limitBtnActive) {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--color-text);
+  }
+  
+  &.limitBtnActive {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+}
+
+.pagination { 
+  display: flex; 
+  align-items: center; 
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.pageBtn { 
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text); 
+  padding: 0.35rem 0.85rem; 
+  border-radius: 0.4rem; 
+  transition: all 0.2s ease; 
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+  cursor: pointer;
+  
+  &:disabled { opacity: 0.3; cursor: not-allowed; } 
+  &:hover:not(:disabled) { background: var(--color-primary); color: white; border-color: var(--color-primary); } 
+}
+
+.pageInfo { 
+  color: var(--color-text); 
+  font-size: 0.85rem; 
+  font-weight: 500;
+  min-width: 70px; 
+  text-align: center; 
+}
+
+/* ───────── СЕТКА ТОВАРОВ ───────── */
+.grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); 
+  gap: 1.25rem; 
+  min-height: 400px; 
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(25px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.grid > * {
+  animation: fadeInUp 0.45s ease-out forwards;
+  opacity: 0;
+}
+.grid > *:nth-child(1) { animation-delay: 0.04s; }
+.grid > *:nth-child(2) { animation-delay: 0.08s; }
+.grid > *:nth-child(3) { animation-delay: 0.12s; }
+.grid > *:nth-child(4) { animation-delay: 0.16s; }
+.grid > *:nth-child(5) { animation-delay: 0.2s; }
+.grid > *:nth-child(6) { animation-delay: 0.24s; }
+.grid > *:nth-child(7) { animation-delay: 0.28s; }
+.grid > *:nth-child(8) { animation-delay: 0.32s; }
+.grid > *:nth-child(9) { animation-delay: 0.36s; }
+.grid > *:nth-child(10) { animation-delay: 0.4s; }
+.grid > *:nth-child(11) { animation-delay: 0.44s; }
+.grid > *:nth-child(12) { animation-delay: 0.48s; }
+.grid > *:nth-child(n+13) { animation-delay: 0.52s; }
+
+.empty { 
+  text-align: center; 
+  padding: 3rem; 
+  color: var(--color-text-muted); 
+  font-size: 0.95rem; 
+  grid-column: 1 / -1; 
+}
+
+/* ───────── АДАПТИВ ───────── */
+@media (max-width: 1024px) {
+  .filters { grid-template-columns: 1fr 1fr; top: 5rem; }
+  .search { grid-column: 1 / -1; }
+  .paginationWrapper { max-width: 500px; }
+}
+
+@media (max-width: 600px) { 
+  .filters { grid-template-columns: 1fr; top: 4.5rem; padding: 0.6rem 0.85rem; }
+  .search { grid-column: auto; }
+  .paginationWrapper { 
+    grid-template-columns: 1fr; 
+    text-align: center;
+    width: calc(100% - 1.5rem);
+    padding: 0.35rem 0.6rem;
+    min-height: 40px;
+  }
+  .limitButtons { justify-content: center; margin-bottom: 0.25rem; }
+  .pagination { justify-self: center; gap: 0.5rem; }
+  .pageInfo { min-width: 60px; font-size: 0.8rem; }
+  .pageBtn { padding: 0.3rem 0.7rem; font-size: 0.8rem; }
+}
+
+/* ───────── FALLBACK ───────── */
+@supports not (backdrop-filter: blur(10px)) {
+  .filters, .paginationWrapper {
+    background: rgba(30, 30, 30, 0.95);
+    border-color: var(--color-border);
+  }
+}

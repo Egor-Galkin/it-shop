@@ -1,0 +1,433 @@
+.home { 
+  max-width: 1200px; 
+  margin: 3rem auto 0; 
+  padding: 0 1rem; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 4rem; 
+}
+
+/* ───────── ОБЩАЯ АНИМАЦИЯ ───────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate {
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+/* ───────── ЗАГОЛОВОК СЕКЦИИ ───────── */
+.sectionTitle {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: var(--color-text);
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background: var(--color-primary);
+    border-radius: 2px;
+  }
+}
+
+/* ───────── ПРЕИМУЩЕСТВА (Flexbox, шахматный порядок) ───────── */
+.advantages {
+  padding: 2rem 0;
+}
+
+.advantagesList {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.advantageBlock {
+  display: flex;
+  flex-direction: row; /* По умолчанию: Текст | Картинка */
+  gap: 3rem;
+  align-items: center;
+  padding: 0;
+  
+  /* Шахматное чередование: Картинка | Текст */
+  &.reverse {
+    flex-direction: row-reverse; 
+  }
+
+  /* Эффекты при наведении */
+  &:hover {
+    .advImage { 
+      border-color: var(--color-primary); 
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15); 
+      background: var(--color-surface);
+    }
+    .advDivider { 
+      background: var(--color-primary); 
+      height: 3px; 
+      width: 80px; 
+    }
+  }
+}
+
+.advImage {
+  background: var(--color-bg);
+  border: 2px solid var(--color-border);
+  border-radius: 1rem;
+  padding: 2rem;
+  min-height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex: 0.95; /* Занимает половину ширины */
+  
+  img {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    object-fit: contain;
+  }
+}
+
+.advContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1; /* Занимает половину ширины */
+}
+
+.advTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.advDivider {
+  width: 50px;
+  height: 2px;
+  background: var(--color-border);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.advDesc {
+  color: var(--color-text-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ───────── КАТЕГОРИИ ───────── */
+.categories {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.categoriesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.categoryCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 1.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  text-decoration: none;
+  color: var(--color-text);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.catIcon {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+  border-radius: 1rem;
+  
+  img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+  }
+}
+
+.catName {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+/* ───────── О МАГАЗИНЕ ───────── */
+.info {
+  text-align: center; 
+  padding: 2.5rem;
+  background: linear-gradient(180deg, var(--color-surface) 0%, transparent 100%);
+  border-radius: 1rem; 
+  border: 1px solid var(--color-border);
+  position: relative; 
+  overflow: hidden;
+  
+  &::before {
+    content: ''; 
+    position: absolute; 
+    top: 0; 
+    left: 50%; 
+    transform: translateX(-50%);
+    width: 100px; 
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+  }
+}
+
+.infoTitle { 
+  font-size: 2.25rem; 
+  margin-bottom: 1rem; 
+  position: relative; 
+}
+
+.infoText { 
+  color: var(--color-text-muted); 
+  max-width: 700px; 
+  margin: 0 auto 2.5rem; 
+  line-height: 1.6; 
+}
+
+.features { 
+  display: grid; 
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 2rem; 
+}
+
+.feature {
+  background: var(--color-bg);
+  padding: 2.5rem 2rem;
+  border-radius: 0.85rem;
+  border: 1px solid var(--color-border);
+  transition: all 0.3s ease;
+  position: relative; 
+  overflow: hidden;
+  text-align: center;
+  
+  &::after {
+    content: ''; 
+    position: absolute; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 3px;
+    background: var(--color-primary); 
+    transform: scaleX(0); 
+    transition: transform 0.3s ease;
+    transform-origin: left;
+  }
+  
+  &:hover {
+    border-color: var(--color-primary);
+    background: var(--color-surface);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  }
+  
+  &:hover::after { 
+    transform: scaleX(1); 
+  }
+}
+
+.featureTitle { 
+  margin-bottom: 0.75rem; 
+  color: var(--color-text); 
+  font-size: 1.25rem; 
+}
+
+.featureText { 
+  margin: 0; 
+  font-size: 0.95rem; 
+  color: var(--color-text-muted); 
+  line-height: 1.5; 
+}
+
+/* ───────── СТАТИСТИКА ───────── */
+.stats {
+  background: var(--color-surface);
+  border-radius: 1rem;
+  padding: 2.5rem;
+  border: 1px solid var(--color-border);
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 2rem;
+  text-align: center;
+}
+
+.statCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.statValue {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+.statLabel {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+/* ───────── CTA ───────── */
+.cta {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+  border-radius: 1rem;
+  padding: 3rem;
+  text-align: center;
+  color: white;
+}
+
+.ctaContent {
+  max-width: 600px;
+  margin: 0 auto;
+  
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    margin-bottom: 2rem;
+    opacity: 0.9;
+    font-size: 1.1rem;
+  }
+}
+
+.ctaBtn {
+  display: inline-block;
+  background: white;
+  color: var(--color-primary);
+  padding: 0.85rem 2.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.2s;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* ───────── ПАРТНЁРЫ ───────── */
+.partners { 
+  text-align: center; 
+}
+
+.partnersTitle { 
+  font-size: 2rem; 
+  margin-bottom: 2.5rem; 
+  position: relative; 
+  display: inline-block; 
+  
+  &::after {
+    content: ''; 
+    position: absolute; 
+    bottom: -8px; 
+    left: 50%; 
+    transform: translateX(-50%);
+    width: 40px; 
+    height: 3px; 
+    background: var(--color-primary); 
+    border-radius: 2px;
+  }
+}
+
+.partnersGrid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+  gap: 1.5rem; 
+}
+
+.partner {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: 1.75rem 1rem;
+  text-align: center; 
+  border-radius: 0.75rem;
+  font-weight: 600; 
+  font-size: 1.1rem; 
+  letter-spacing: 0.5px;
+  transition: all 0.25s ease; 
+  cursor: default;
+  
+  &:hover {
+    border-color: var(--color-primary);
+    background: rgba(59, 130, 246, 0.05);
+    color: var(--color-primary);
+    transform: translateY(-3px);
+  }
+}
+
+/* ───────── АДАПТИВ ───────── */
+@media (max-width: 900px) { 
+  .features { grid-template-columns: 1fr 1fr; }
+  
+  .advantageBlock {
+    flex-direction: column; /* Вертикально на планшетах */
+    
+    &.reverse {
+      flex-direction: column; /* Отменяем row-reverse */
+    }
+  }
+  
+  .advImage {
+    order: 2; /* Картинка всегда внизу */
+    width: 100%;
+    
+    img { max-width: 200px; }
+  }
+}
+
+@media (max-width: 640px) { 
+  .home { gap: 3rem; } 
+  .features { grid-template-columns: 1fr; } 
+  .partnersGrid { grid-template-columns: repeat(2, 1fr); } 
+  .info { padding: 1.5rem; }
+  .categoriesGrid { grid-template-columns: repeat(2, 1fr); }
+  .statsGrid { grid-template-columns: repeat(2, 1fr); }
+  .cta { padding: 2rem 1.5rem; }
+  .ctaContent h2 { font-size: 1.5rem; }
+  
+  .advantageBlock { gap: 1.5rem; }
+  .advTitle { font-size: 1.4rem; }
+  .advDesc { font-size: 0.95rem; }
+  .advImage { padding: 1.5rem; min-height: auto; }
+}

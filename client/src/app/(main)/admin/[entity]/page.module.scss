@@ -1,0 +1,59 @@
+.adminPage {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Панель переключения */
+.entityTabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  padding: 0.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+}
+
+.tab {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  background: none;
+  border: none;
+  border-radius: 0.5rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  
+  &:hover {
+    color: var(--color-text);
+    background: var(--color-surface-hover);
+  }
+  
+  &.active {
+    background: var(--color-primary);
+    color: white;
+    
+    &:hover {
+      background: var(--color-primary);
+    }
+  }
+}
+
+.adminContent {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .entityTabs {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}

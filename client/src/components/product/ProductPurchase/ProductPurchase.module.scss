@@ -1,0 +1,123 @@
+.purchaseWrap {
+  border-top: 1px solid var(--color-primary);
+  padding-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.purchaseControls {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.qtyControl {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.qtyBtn {
+  width: 34px; 
+  height: 34px;
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  color: var(--color-text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  
+  &:hover:not(:disabled) { 
+    background: var(--color-primary); 
+    border-color: var(--color-primary); 
+    color: white; 
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.qtyInput {
+  width: 45px;
+  height: 34px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  color: var(--color-text);
+  -moz-appearance: textfield;
+  
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+  }
+}
+
+.totalBlock {
+  display: flex; 
+  align-items: center; 
+  gap: 0.5rem; 
+  font-size: 0.9rem;
+  
+  span { color: var(--color-text-muted); }
+  strong { font-size: 1.05rem; color: var(--color-text); }
+}
+
+.purchaseAction {
+  display: flex; 
+  flex-direction: column; 
+  gap: 0.3rem; 
+  align-items: flex-end;
+}
+
+.addToCartBtn {
+  padding: 0.65rem 2rem;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover:not(:disabled) {
+    background: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+  
+  &.added {
+    background: var(--color-success);
+    cursor: default;
+    
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+  
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+}

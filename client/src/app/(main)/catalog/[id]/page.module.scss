@@ -1,0 +1,128 @@
+.product {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Ошибки и пустые состояния */
+.error {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--color-text-muted);
+  
+  p {
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+.backBtn {
+  background: var(--color-primary);
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 0.95rem;
+  
+  &:hover {
+    background: var(--color-primary-hover);
+  }
+}
+
+/* Анимации появления */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate {
+  animation: fadeInUp 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+.mainBlock.animate { animation-delay: 0.1s; }
+
+/* Сетка основного блока */
+.mainBlock {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 1.5rem;
+  align-items: stretch;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  grid-column: 2;
+}
+
+/* Админская кнопка */
+.adminActionWrap {
+  border-top: 1px solid var(--color-border);
+  padding-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.editBtn {
+  padding: 0.65rem 2rem;
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+}
+
+/* Адаптив */
+@media (max-width: 900px) {
+  .mainBlock {
+    grid-template-columns: 1fr;
+    
+    .rightColumn { 
+      grid-column: 1; 
+    }
+  }
+  
+  .purchaseWrap, .adminActionWrap { 
+    flex-direction: column; 
+    align-items: stretch; 
+  }
+  .purchaseAction, .adminActionWrap { 
+    align-items: center; 
+  }
+}
+
+@media (max-width: 600px) {
+  .product { 
+    gap: 1.5rem; 
+  }
+  .mainBlock {
+    padding: 1rem;
+  }
+}

@@ -1,0 +1,317 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  
+  /* Glassmorphism */
+  background: rgba(15, 15, 15, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  
+  transition: background 0.3s ease, border-color 0.3s ease;
+  transform: translateZ(0);
+  will-change: opacity;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.85rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* Логотип + текст */
+.logoLink {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  
+  &:hover {
+    .logoImage {
+      border-color: var(--color-primary);
+    }
+    .logoText {
+      color: var(--color-primary);
+    }
+  }
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logoImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.logoText {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.navLink {
+  color: var(--color-text-muted);
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0;
+  position: relative;
+  
+  /* Подчёркивание (по умолчанию скрыто) */
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #ffffff;
+    transition: width 0.2s ease;
+    opacity: 0;
+  }
+  
+  /* При наведении: синий текст, без подчёркивания */
+  &:hover {
+    color: var(--color-primary);
+    
+    &::after {
+      width: 0;
+    }
+  }
+  
+  /* Активная страница: белый текст + подчёркивание */
+  &.active {
+    color: #ffffff;
+    font-weight: 600;
+    
+    &::after {
+      width: 100%;
+      opacity: 1;
+      background: var(--color-primary);
+    }
+  }
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.userEmail {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 400;
+  line-height: 1;
+  margin-right: 0.25rem;
+}
+
+.loginBtn {
+  background: var(--color-primary);
+  color: white;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid var(--color-primary);
+  line-height: 1;
+  
+  &:hover {
+    background: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
+  }
+  
+  &.active {
+    background: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+  }
+}
+
+.logoutBtn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  padding: 0.45rem 1.1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* ✅ Новый блок: иконка + email */
+.userBlock {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  cursor: pointer;
+  
+  /* Анимация появления email */
+  .userEmail {
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.2s ease;
+    pointer-events: none;
+    
+    &.pinned {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+  }
+  
+  &:hover .userEmail:not(.pinned) {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ✅ Иконка пользователя */
+.userAvatar {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  &:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+  }
+  
+  &.pinned {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+  }
+}
+
+/* ✅ Email слева от иконки */
+.userEmail {
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+  
+  &.pinned {
+    font-weight: 500;
+  }
+}
+
+/* АДАПТИВ */
+@media (max-width: 768px) {
+  .container { padding: 0.75rem 1rem; }
+  .left { gap: 1.25rem; }
+  .logoText { font-size: 1.35rem; }
+  .logoImage { width: 36px; height: 36px; }
+  .nav { gap: 1rem; }
+  .navLink { font-size: 0.95rem; }
+  .userEmail { display: none; }
+  .logoutBtn { padding: 0.4rem 0.9rem; font-size: 0.85rem; }
+  .loginBtn { padding: 0.45rem 1rem; font-size: 0.9rem; }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 0.65rem 0.85rem; }
+  .left { gap: 1rem; }
+  .logoText { font-size: 1.25rem; }
+  .logoImage { width: 32px; height: 32px; border-radius: 6px; }
+  .nav { gap: 0.75rem; }
+  .navLink { font-size: 0.9rem; }
+  .right { gap: 0.5rem; }
+  .logoutBtn { padding: 0.35rem 0.8rem; font-size: 0.8rem; }
+  .loginBtn { padding: 0.4rem 0.9rem; font-size: 0.85rem; }
+}
+
+/* ✅ Адаптив: скрываем email на мобильных */
+@media (max-width: 768px) {
+  .userEmail {
+    display: none !important; /* Принудительно скрываем на мобильных */
+  }
+  
+  .userBlock {
+    gap: 0;
+  }
+  
+  .userAvatar {
+    width: 30px;
+    height: 30px;
+    
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}

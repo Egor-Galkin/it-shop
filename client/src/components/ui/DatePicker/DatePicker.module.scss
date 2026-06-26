@@ -1,0 +1,59 @@
+.datePicker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.label {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.input {
+  padding: 0.5rem 0.5rem;
+  background: #0f172a;
+  border: 1px solid var(--color-border);
+  border-radius: 0.4rem;
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  appearance: none;
+  
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+  }
+  
+  &::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(1.2);
+    cursor: pointer;
+    opacity: 0.8;
+    
+    &:hover {
+      opacity: 1;
+    }
+  }
+  
+  /* ✅ Стиль для disabled состояния */
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #1e293b;
+    
+    &::-webkit-calendar-picker-indicator {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .input {
+    padding: 0.45rem 0.65rem;
+    font-size: 0.85rem;
+  }
+}
