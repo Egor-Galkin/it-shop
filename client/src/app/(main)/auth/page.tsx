@@ -84,10 +84,14 @@ export default function AuthPage() {
 
       dispatch(setCredentials(data));
 
+      /*
       await new Promise(resolve => setTimeout(resolve, 150));
 
       router.push('/');
       router.refresh();
+      */
+
+      window.location.href = '/';
     } catch (err: any) {
       dispatch(setError(err.response?.data?.message || 'Произошла ошибка'));
     } finally {
