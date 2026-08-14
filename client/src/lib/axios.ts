@@ -5,13 +5,21 @@ export const api = axios.create({
   timeout: 10000,
 });
 
-// Автоматически добавляем JWT токен
+// Автоматически добавляем JWT токен к каждому запросу
 api.interceptors.request.use((config) => {
   if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('access_token');
-    // лог для отладки
-    console.log('[Ax interceptor] Token:', token ? '✓ Present' : '✗ Missing');
-    if (token) config.headers.Authorization = `Bearer ${token}`;
+    try {
+      const token = localStorage.getItem('access_token');
+      // Лог для отладки: видно в консоли браузера (F12 → Console)
+      console.log('[Axios interceptor] Token:', token ? '✓ Present' : '✗ Missing');
+      
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    } catch (e) {
+      // Если localStorage недоступен (редко, но бывает в приватном режиме)
+      console.warn('[Axios interceptor] localStorage error:', e);
+    }
   }
   return config;
 });
@@ -27,6 +35,7 @@ api.interceptors.response.use(
 
     // Перенаправляем на вход ТОЛЬКО если токен истёк/невалиден и это не форма логина
     if (err.response?.status === 401 && typeof window !== 'undefined' && !isAuthRequest) {
+      console.log('[Axios interceptor] 401 detected, clearing auth data');
       localStorage.removeItem('access_token');
       localStorage.removeItem('user');
       window.location.href = '/auth';

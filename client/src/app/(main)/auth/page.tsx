@@ -70,10 +70,22 @@ export default function AuthPage() {
     
     dispatch(setLoading(true));
     dispatch(setError(null));
+
     try {
       const endpoint = isLogin ? '/auth/login' : '/auth/register';
       const { data } = await api.post(endpoint, { email, password });
+
+      // Сохраняем токен в localStorage СРАЗУ, до любых других действий
+      if (data.access_token) {
+        localStorage.setItem('access_token', data.access_token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        console.log('[Login] Token saved to localStorage');
+      }
+
       dispatch(setCredentials(data));
+
+      await new Promise(resolve => setTimeout(resolve, 150));
+
       router.push('/');
       router.refresh();
     } catch (err: any) {
