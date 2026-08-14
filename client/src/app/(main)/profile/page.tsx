@@ -28,9 +28,11 @@ export default function ProfilePage() {
     const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
     
     // Редиректим ТОЛЬКО если нет ни в Redux, ни в localStorage
+    /*
     if (!user && !token) {
       router.push('/auth');
     }
+    */
   }, [user, router, isReady]);
 
   useEffect(() => {
