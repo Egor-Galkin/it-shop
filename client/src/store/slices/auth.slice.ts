@@ -9,7 +9,33 @@ interface AuthState {
   error: string | null;
 }
 
-const initialState: AuthState = { user: null, token: null, isLoading: false, error: null };
+// ✅ Безопасная инициализация состояния из localStorage
+const getInitialState = (): AuthState => {
+  if (typeof window === 'undefined') {
+    return { user: null, token: null, isLoading: false, error: null };
+  }
+  
+  try {
+    const token = localStorage.getItem('access_token');
+    const userRaw = localStorage.getItem('user');
+    
+    // ✅ Проверяем, что token есть И user не равен строке "undefined"
+    if (token && userRaw && userRaw !== 'undefined') {
+      return {
+        user: JSON.parse(userRaw),
+        token,
+        isLoading: false,
+        error: null,
+      };
+    }
+  } catch (e) {
+    console.warn('Failed to initialize auth from localStorage:', e);
+  }
+  
+  return { user: null, token: null, isLoading: false, error: null };
+};
+
+const initialState: AuthState = getInitialState();
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -33,17 +59,16 @@ export const authSlice = createSlice({
         localStorage.removeItem('user');
       }
     },
-    setLoading: (state, action: PayloadAction<boolean>) => { state.isLoading = action.payload; },
-    setError: (state, action: PayloadAction<string | null>) => { state.error = action.payload; },
+    setLoading: (state, action: PayloadAction<boolean>) => { 
+      state.isLoading = action.payload; 
+    },
+    setError: (state, action: PayloadAction<string | null>) => { 
+      state.error = action.payload; 
+    },
+    // ✅ initializeAuth больше не нужен — инициализация происходит в getInitialState()
+    // Но оставляем как заглушку, если где-то вызывается
     initializeAuth: (state) => {
-      if (typeof window !== 'undefined') {
-        const token = localStorage.getItem('access_token');
-        const user = localStorage.getItem('user');
-        if (token && user) {
-          state.token = token;
-          state.user = JSON.parse(user);
-        }
-      }
+      // Инициализация уже выполнена в getInitialState(), этот редьюсер можно оставить пустым
     },
   },
 });
