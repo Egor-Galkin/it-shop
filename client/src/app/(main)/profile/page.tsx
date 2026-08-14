@@ -11,29 +11,21 @@ import { HistoryTab } from './components/HistoryTab';
 import { PasswordTab } from './components/PasswordTab';
 
 export default function ProfilePage() {
-  const user = useAppSelector((state) => state.auth.user);
+  // ✅ Берём и user, и token из Redux
+  const { user, token } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const router = useRouter();
   
   const [activeTab, setActiveTab] = useState<string>(user?.role === 'ADMIN' ? 'management' : 'cart');
-  const [isReady, setIsReady] = useState(false);
 
-  useEffect(() => setIsReady(true), []);
-  
+  // ✅ Проверка авторизации ТОЛЬКО после монтирования (на клиенте)
   useEffect(() => {
-    if (!isReady) return;
-    
-    // ✅ ПРЯМАЯ ПРОВЕРКА localStorage + Redux
-    // Если нет пользователя в Redux НО есть токен в localStorage — ждём синхронизации
-    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
-    
-    // Редиректим ТОЛЬКО если нет ни в Redux, ни в localStorage
-    /*
-    if (!user && !token) {
+    // ✅ Редиректим, если НЕТ токена в Redux
+    // Токен попадает в Redux через ReduxProvider → initializeAuth → getInitialState
+    if (!token) {
       router.push('/auth');
     }
-    */
-  }, [user, router, isReady]);
+  }, [token, router]);
 
   useEffect(() => {
     if (user?.role === 'CLIENT' && activeTab === 'cart') {
@@ -41,14 +33,10 @@ export default function ProfilePage() {
     }
   }, [user, activeTab, dispatch]);
 
-  // ✅ Ждём готовности И (пользователя в Redux ИЛИ токена в localStorage)
-  if (!isReady || (!user && typeof window !== 'undefined' && !localStorage.getItem('access_token'))) {
-    return null;
-  }
-
-  // ✅ Если пользователя в Redux ещё нет, но токен есть — показываем заглушку до синхронизации
+  // ✅ Пока нет пользователя — рендерим ПРОСТУЮ заглушку (одинаковую на сервере и клиенте)
+  // Это предотвращает ошибку гидратации #418
   if (!user) {
-    return <div className="min-h-screen flex items-center justify-center">Загрузка...</div>;
+    return <div className="min-h-screen" />;
   }
 
   const isAdmin = user.role === 'ADMIN';
