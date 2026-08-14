@@ -10,39 +10,34 @@ import { CartTab } from './components/CartTab';
 import { HistoryTab } from './components/HistoryTab';
 import { PasswordTab } from './components/PasswordTab';
 
-// ✅ ОТКЛЮЧАЕМ SSR ДЛЯ ЭТОЙ СТРАНИЦЫ — рендеринг только на клиенте
-// Это полностью устраняет ошибку гидратации #418
-export const dynamic = 'force-dynamic';
-export const fetchCache = 'force-no-store';
-export const revalidate = 0;
-
 export default function ProfilePage() {
   const { user, token } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const router = useRouter();
   
+  // ✅ useState импортирован напрямую из 'react'
   const [activeTab, setActiveTab] = useState<string>(user?.role === 'ADMIN' ? 'management' : 'cart');
 
-  // ✅ Проверка авторизации — только на клиенте
+  // ✅ Проверка авторизации — только на клиенте (в useEffect)
   useEffect(() => {
+    // Если нет токена в Redux — редирект на логин
+    // Токен попадает в Redux через getInitialState() в auth.slice.ts
     if (!token) {
       router.push('/auth');
     }
   }, [token, router]);
 
+  // ✅ Загрузка корзины для CLIENT
   useEffect(() => {
     if (user?.role === 'CLIENT' && activeTab === 'cart') {
       dispatch(fetchCart());
     }
   }, [user, activeTab, dispatch]);
 
-  // ✅ Если нет пользователя — показываем лоадер (только на клиенте)
+  // ✅ Пока нет пользователя — рендерим ПРОСТУЮ заглушку
+  // Это предотвращает ошибку гидратации #418, т.к. сервер и клиент видят одинаковый HTML
   if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse text-gray-500">Загрузка профиля...</div>
-      </div>
-    );
+    return <div className="min-h-screen" />;
   }
 
   const isAdmin = user.role === 'ADMIN';
