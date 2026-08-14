@@ -28,6 +28,9 @@ export class UsersService {
     if (exists) throw new ConflictException('User with this email already exists');
 
     const hashedPassword = await this.hashPassword(createUserDto.password);
+
+    // Явно исключаем поле id, если оно вдруг пришло из фронтенда
+    const { id, ...safeData } = createUserDto as any;
     
     return this.prisma.user.create({
       data: {

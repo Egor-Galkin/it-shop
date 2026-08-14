@@ -9,6 +9,8 @@ export const api = axios.create({
 api.interceptors.request.use((config) => {
   if (typeof window !== 'undefined') {
     const token = localStorage.getItem('access_token');
+    // лог для отладки
+    console.log('[Ax interceptor] Token:', token ? '✓ Present' : '✗ Missing');
     if (token) config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
