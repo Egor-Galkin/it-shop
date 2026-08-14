@@ -1,7 +1,15 @@
 // server/prisma/seed.ts
+import "dotenv/config";
 import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+// @ts-ignore — обходим строгую типизацию для адаптера
+const { PrismaPgAdapter } = require('@prisma/adapter-pg');
+
+const prisma = new PrismaClient({
+  adapter: new PrismaPgAdapter({
+    connectionString: process.env.DATABASE_URL,
+  }),
+});
 
 async function main() {
   console.log('Starting database seed...');
