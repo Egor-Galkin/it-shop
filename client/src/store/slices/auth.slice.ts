@@ -13,12 +13,32 @@ interface AuthState {
   error: string | null;
 }
 
-const initialState: AuthState = { 
-  user: null, 
-  token: null, 
-  isLoading: false, 
-  error: null 
+// ✅ Безопасная инициализация из localStorage
+const getInitialState = (): AuthState => {
+  if (typeof window === 'undefined') {
+    return { user: null, token: null, isLoading: false, error: null };
+  }
+  
+  try {
+    const token = localStorage.getItem('access_token');
+    const userRaw = localStorage.getItem('user');
+    
+    if (token && userRaw && userRaw !== 'undefined') {
+      return {
+        user: JSON.parse(userRaw),
+        token,
+        isLoading: false,
+        error: null,
+      };
+    }
+  } catch (e) {
+    console.warn('Failed to initialize auth from localStorage:', e);
+  }
+  
+  return { user: null, token: null, isLoading: false, error: null };
 };
+
+const initialState: AuthState = getInitialState();
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -28,11 +48,19 @@ export const authSlice = createSlice({
       state.user = action.payload.user;
       state.token = action.payload.access_token;
       state.error = null;
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('access_token', action.payload.access_token);
+        localStorage.setItem('user', JSON.stringify(action.payload.user));
+      }
     },
     logout: (state) => {
       state.user = null;
       state.token = null;
       state.error = null;
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('user');
+      }
     },
     setLoading: (state, action: PayloadAction<boolean>) => { 
       state.isLoading = action.payload; 
@@ -40,8 +68,13 @@ export const authSlice = createSlice({
     setError: (state, action: PayloadAction<string | null>) => { 
       state.error = action.payload; 
     },
+    // ✅ Оставляем initializeAuth для совместимости с ReduxProvider
+    initializeAuth: (state) => {
+      // Инициализация уже выполнена в getInitialState()
+    },
   },
 });
 
-export const { setCredentials, logout, setLoading, setError } = authSlice.actions;
+// ✅ Экспортируем все редьюсеры, включая initializeAuth
+export const { setCredentials, logout, setLoading, setError, initializeAuth } = authSlice.actions;
 export default authSlice.reducer;

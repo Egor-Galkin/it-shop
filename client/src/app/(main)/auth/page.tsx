@@ -1,99 +1,155 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setCredentials, logout } from '@/store/slices/auth.slice';
+import { setCredentials, setLoading, setError } from '@/store/slices/auth.slice';
 import { api } from '@/lib/axios';
+import { FormField } from '@/components/ui/FormField/FormField';
+import styles from './page.module.scss';
 
-// Простой интерфейс пользователя
-interface User {
-  id: number;
-  email: string;
-  role: 'CLIENT' | 'ADMIN';
-}
-
-export default function HomePage() {
-  const [isClient, setIsClient] = useState(false);
-  const [authUser, setAuthUser] = useState<User | null>(null);
-  const [authToken, setAuthToken] = useState<string | null>(null);
+export default function AuthPage() {
+  const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [touched, setTouched] = useState({ email: false, password: false });
+  const [errors, setErrors] = useState({ email: '', password: '' });
+  const [isClient, setIsClient] = useState(false); // ✅ Для предотвращения гидратации
+  
   const dispatch = useAppDispatch();
+  const router = useRouter();
+  const { isLoading, error: authError } = useAppSelector((s) => s.auth);
 
-  // Проверяем авторизацию только на клиенте
+  // ✅ Инициализируем isClient только на клиенте
   useEffect(() => {
     setIsClient(true);
-    
-    try {
-      const token = localStorage.getItem('access_token');
-      const userRaw = localStorage.getItem('user');
-      
-      if (token && userRaw && userRaw !== 'undefined') {
-        const user = JSON.parse(userRaw);
-        setAuthToken(token);
-        setAuthUser(user);
-        // Синхронизируем с Redux
-        dispatch(setCredentials({ access_token: token, user }));
-      }
-    } catch (e) {
-      console.warn('Auth check error:', e);
-      // Если ошибка парсинга — делаем logout
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('user');
-      dispatch(logout());
-    }
-  }, [dispatch]);
+  }, []);
 
-  // Пока не клиент — рендерим минимальную заглушку (совпадает с сервером)
+  const validateField = (name: 'email' | 'password', value: string, required = true) => {
+    let err = '';
+    if (required && value.trim().length === 0) {
+      err = 'Это поле обязательно для заполнения';
+    }
+    else if (name === 'email' && value.length > 0) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        err = 'Введите корректный email';
+      }
+    }
+    else if (name === 'password' && value.length > 0) {
+      if (value.length < 6) {
+        err = `Текст должен быть не короче 6 симв. Длина текста сейчас: ${value.length} симв.`;
+      }
+    }
+    setErrors(p => ({ ...p, [name]: err }));
+    return !err;
+  };
+
+  const handleBlur = (name: 'email' | 'password') => {
+    setTouched(p => ({ ...p, [name]: true }));
+    validateField(name, name === 'email' ? email : password);
+  };
+
+  const handleChange = (name: 'email' | 'password', value: string) => {
+    if (name === 'email') setEmail(value);
+    else setPassword(value);
+    if (touched[name]) validateField(name, value);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setTouched({ email: true, password: true });
+    
+    const emailValid = validateField('email', email);
+    const passValid = validateField('password', password);
+    if (!emailValid || !passValid) return;
+    
+    dispatch(setLoading(true));
+    dispatch(setError(null));
+
+    try {
+      const endpoint = isLogin ? '/auth/login' : '/auth/register';
+      const { data } = await api.post(endpoint, { email, password });
+
+      // ✅ Сохраняем токен и пользователя в localStorage
+      if (data.access_token) {
+        localStorage.setItem('access_token', data.access_token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+      }
+
+      // ✅ Обновляем Redux
+      dispatch(setCredentials(data));
+
+      // ✅ Полная перезагрузка страницы — гарантирует, что следующий запрос будет с токеном
+      window.location.href = '/';
+      
+    } catch (err: any) {
+      dispatch(setError(err.response?.data?.message || 'Произошла ошибка'));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+  const hasErrors = Boolean(errors.email || errors.password);
+
+  // ✅ Пока не клиент — рендерим пустой div (предотвращаем гидратацию)
   if (!isClient) {
-    return <div className="min-h-screen" />;
+    return <div className={styles.container} />;
   }
 
-  // ✅ После проверки — показываем правильный контент
   return (
-    <main className="min-h-screen">
-      {authToken && authUser ? (
-        // Авторизованный контент
-        <div className="container mx-auto p-4">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold">Добро пожаловать, {authUser.email}!</h1>
-            <button
-              onClick={() => {
-                localStorage.removeItem('access_token');
-                localStorage.removeItem('user');
-                dispatch(logout());
-                setAuthToken(null);
-                setAuthUser(null);
-                window.location.href = '/';
-              }}
-              className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-            >
-              Выйти
-            </button>
-          </div>
-          <div className="bg-gray-50 p-4 rounded">
-            <p><strong>Role:</strong> {authUser.role}</p>
-            <p><strong>ID:</strong> {authUser.id}</p>
-          </div>
-          {/* Здесь будет твой каталог товаров */}
-          <div className="mt-6">
-            <h2 className="text-xl font-semibold mb-4">Каталог товаров</h2>
-            <p className="text-gray-600">Загрузка товаров...</p>
-            {/* <ProductList /> */}
-          </div>
+    <div className={styles.container}>
+      <div className={styles.card}>
+        <h1 className={styles.title}>{isLogin ? 'Авторизация' : 'Регистрация'}</h1>
+        {authError && <div className={styles.error}>{authError}</div>}
+        <form onSubmit={handleSubmit} className={styles.form} noValidate>
+          <FormField 
+            label="Email" 
+            name="email" 
+            type="email"
+            value={email} 
+            onChange={e => handleChange('email', e.target.value)}
+            onBlur={() => handleBlur('email')}
+            placeholder="example@email.com"
+            required
+            error={errors.email}
+            touched={touched.email}
+            autoComplete="email"
+            disabled={isLoading}
+          />
+          <FormField 
+            label="Пароль" 
+            name="password" 
+            type="password"
+            value={password} 
+            onChange={e => handleChange('password', e.target.value)}
+            onBlur={() => handleBlur('password')}
+            placeholder="Минимум 6 символов"
+            required
+            minLength={6}
+            error={errors.password}
+            touched={touched.password}
+            autoComplete={isLogin ? 'current-password' : 'new-password'}
+            disabled={isLoading}
+          />
+          <button type="submit" disabled={isLoading || hasErrors} className={styles.submitBtn}>
+            {isLoading ? 'Загрузка...' : (isLogin ? 'Войти' : 'Зарегистрироваться')}
+          </button>
+        </form>
+        <div className={styles.toggle}>
+          {isLogin ? 'Нет аккаунта? ' : 'Есть аккаунт? '}
+          <button 
+            type="button" 
+            onClick={() => { 
+              setIsLogin(!isLogin); 
+              dispatch(setError(null));
+              setTouched({ email: false, password: false });
+              setErrors({ email: '', password: '' });
+            }}
+            className={styles.toggleBtn}
+          >
+            {isLogin ? 'Зарегистрируйтесь' : 'Авторизуйтесь'}
+          </button>
         </div>
-      ) : (
-        // Публичный контент
-        <div className="container mx-auto p-4">
-          <h1 className="text-2xl font-bold mb-4">Добро пожаловать в IT-Shop!</h1>
-          <p className="mb-6">Просмотрите наш каталог товаров.</p>
-          <div className="flex gap-4">
-            <a href="/auth" className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-              Войти
-            </a>
-            <a href="/catalog" className="px-6 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
-              Каталог
-            </a>
-          </div>
-        </div>
-      )}
-    </main>
+      </div>
+    </div>
   );
 }
