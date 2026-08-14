@@ -12,6 +12,7 @@ api.interceptors.request.use((config) => {
       const token = localStorage.getItem('access_token');
       // Лог для отладки: видно в консоли браузера (F12 → Console)
       console.log('[Axios interceptor] Token:', token ? '✓ Present' : '✗ Missing');
+      console.log(`[Axios] ${config.method?.toUpperCase()} ${config.url} | Token: ${token ? '✓' : '✗'}`);
       
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
