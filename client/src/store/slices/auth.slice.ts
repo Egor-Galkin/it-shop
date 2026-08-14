@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export interface User { id: number; email: string; role: 'CLIENT' | 'ADMIN'; }
+export interface User { 
+  id: number; 
+  email: string; 
+  role: 'CLIENT' | 'ADMIN'; 
+}
 
 interface AuthState {
   user: User | null;
@@ -9,7 +13,7 @@ interface AuthState {
   error: string | null;
 }
 
-// ✅ Безопасная инициализация состояния из localStorage
+// ✅ Безопасная инициализация состояния из localStorage (выполняется один раз при создании стора)
 const getInitialState = (): AuthState => {
   if (typeof window === 'undefined') {
     return { user: null, token: null, isLoading: false, error: null };
@@ -65,10 +69,10 @@ export const authSlice = createSlice({
     setError: (state, action: PayloadAction<string | null>) => { 
       state.error = action.payload; 
     },
-    // ✅ initializeAuth больше не нужен — инициализация происходит в getInitialState()
-    // Но оставляем как заглушку, если где-то вызывается
+    // ✅ initializeAuth теперь не меняет состояние (инициализация уже выполнена)
+    // Но оставляем как заглушку, если он вызывается где-то в коде
     initializeAuth: (state) => {
-      // Инициализация уже выполнена в getInitialState(), этот редьюсер можно оставить пустым
+      // Инициализация уже выполнена в getInitialState()
     },
   },
 });

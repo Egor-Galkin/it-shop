@@ -5,20 +5,24 @@ export const api = axios.create({
   timeout: 10000,
 });
 
-// Автоматически добавляем JWT токен к каждому запросу
+// Автоматически добавляем JWT токен к каждому запросу (кроме auth-эндпоинтов)
 api.interceptors.request.use((config) => {
   if (typeof window !== 'undefined') {
     try {
       const token = localStorage.getItem('access_token');
-      // Лог для отладки: видно в консоли браузера (F12 → Console)
-      console.log('[Axios interceptor] Token:', token ? '✓ Present' : '✗ Missing');
-      console.log(`[Axios] ${config.method?.toUpperCase()} ${config.url} | Token: ${token ? '✓' : '✗'}`);
       
-      if (token) {
+      // ✅ НЕ добавляй токен к запросам входа/регистрации
+      const isAuthRequest = 
+        config.url?.includes('/auth/login') || 
+        config.url?.includes('/auth/register');
+      
+      if (token && !isAuthRequest) {
         config.headers.Authorization = `Bearer ${token}`;
       }
+      
+      // Лог для отладки
+      console.log(`[Axios] ${config.method?.toUpperCase()} ${config.url} | Token: ${token && !isAuthRequest ? '✓' : '✗'}`);
     } catch (e) {
-      // Если localStorage недоступен (редко, но бывает в приватном режиме)
       console.warn('[Axios interceptor] localStorage error:', e);
     }
   }
@@ -34,7 +38,7 @@ api.interceptors.response.use(
       err.config?.url?.includes('/auth/login') || 
       err.config?.url?.includes('/auth/register');
 
-    // Перенаправляем на вход ТОЛЬКО если токен истёк/невалиден и это не форма логина
+    // Если токен истёк/невалиден И это не форма логина — делаем logout
     if (err.response?.status === 401 && typeof window !== 'undefined' && !isAuthRequest) {
       console.log('[Axios interceptor] 401 detected, clearing auth data');
       localStorage.removeItem('access_token');
