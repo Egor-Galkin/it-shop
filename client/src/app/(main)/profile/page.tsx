@@ -22,8 +22,15 @@ export default function ProfilePage() {
   
   useEffect(() => {
     if (!isReady) return;
+    
+    // ✅ ПРЯМАЯ ПРОВЕРКА localStorage + Redux
+    // Если нет пользователя в Redux НО есть токен в localStorage — ждём синхронизации
     const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
-    if (!user && !token) router.push('/auth');
+    
+    // Редиректим ТОЛЬКО если нет ни в Redux, ни в localStorage
+    if (!user && !token) {
+      router.push('/auth');
+    }
   }, [user, router, isReady]);
 
   useEffect(() => {
@@ -32,7 +39,16 @@ export default function ProfilePage() {
     }
   }, [user, activeTab, dispatch]);
 
-  if (!isReady || !user) return null;
+  // ✅ Ждём готовности И (пользователя в Redux ИЛИ токена в localStorage)
+  if (!isReady || (!user && typeof window !== 'undefined' && !localStorage.getItem('access_token'))) {
+    return null;
+  }
+
+  // ✅ Если пользователя в Redux ещё нет, но токен есть — показываем заглушку до синхронизации
+  if (!user) {
+    return <div className="min-h-screen flex items-center justify-center">Загрузка...</div>;
+  }
+
   const isAdmin = user.role === 'ADMIN';
 
   const renderTab = () => {
