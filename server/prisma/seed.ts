@@ -179,7 +179,7 @@ async function main() {
     `);
     console.log('Created discounts');
 
-    // === 8. Ratings (есть только createdAt, нет updatedAt) ===
+    // === 8. Ratings (есть ТОЛЬКО createdAt, НЕТ updatedAt!) ===
     await pool.query(`
       INSERT INTO "rating" (id, "userId", "deviceId", rate, hidden, description, "createdAt") VALUES 
       (1, 2, 1, 5, false, 'Лучший смартфон! Камера потрясающая, батарея держит весь день.', '${now}'),
