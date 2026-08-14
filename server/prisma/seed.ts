@@ -11,28 +11,27 @@ async function main() {
   });
 
   try {
-    // Текущее время для timestamp-полей
     const now = new Date().toISOString();
 
-    // === 1. Бренды ===
+    // === 1. Бренды (НЕТ createdAt/updatedAt) ===
     await pool.query(`
-      INSERT INTO "brand" (id, name, "createdAt", "updatedAt") VALUES 
-      (1, 'Apple', '${now}', '${now}'),
-      (2, 'Samsung', '${now}', '${now}')
+      INSERT INTO "brand" (id, name) VALUES 
+      (1, 'Apple'),
+      (2, 'Samsung')
       ON CONFLICT (id) DO NOTHING;
     `);
     console.log('✅ Created 2 brands');
 
-    // === 2. Типы ===
+    // === 2. Типы (НЕТ createdAt/updatedAt) ===
     await pool.query(`
-      INSERT INTO "type" (id, name, "createdAt", "updatedAt") VALUES 
-      (1, 'Смартфоны', '${now}', '${now}'),
-      (2, 'Ноутбуки', '${now}', '${now}')
+      INSERT INTO "type" (id, name) VALUES 
+      (1, 'Смартфоны'),
+      (2, 'Ноутбуки')
       ON CONFLICT (id) DO NOTHING;
     `);
     console.log('✅ Created 2 types');
 
-    // === 3. Устройства (добавляем createdAt и updatedAt) ===
+    // === 3. Устройства (ЕСТЬ createdAt/updatedAt) ===
     await pool.query(`
       INSERT INTO "device" (
         id, name, price, rating, img, "brandId", "typeId", "createdAt", "updatedAt"
