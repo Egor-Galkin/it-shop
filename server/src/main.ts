@@ -16,8 +16,15 @@ async function bootstrap() {
 
   // РАЗРЕШАЕМ CORS (добавь эту строку!)
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    origin: [
+      'http://localhost:3000',
+      'http://127.0.0.1:3000',
+      'https://it-shop-web.onrender.com',
+      'https://it-shop-d38x.onrender.com',
+    ],
     credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type, Authorization',
   });
 
   // Раздаём папку uploads по пути /uploads
