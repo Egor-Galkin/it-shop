@@ -1,3 +1,8 @@
+// ✅ Отключаем статическую генерацию
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;
+
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -11,8 +16,6 @@ import { HistoryTab } from './components/HistoryTab';
 import { PasswordTab } from './components/PasswordTab';
 
 export default function ProfilePage() {
-
-  // ✅ Этот лог сработает даже ДО любых хуков
   if (typeof window !== 'undefined') {
     console.log('🔍 [ProfilePage] >>> FUNCTION CALLED <<<');
   }
@@ -24,7 +27,6 @@ export default function ProfilePage() {
   const [authChecked, setAuthChecked] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('cart');
 
-  // ✅ ЛОГИ: При монтировании компонента
   useEffect(() => {
     console.log('🔍 [ProfilePage] Component mounted');
     console.log('🔍 [ProfilePage] Initial Redux state:', { token: token ? '✓' : '✗', user: user ? user.email : null });
@@ -39,23 +41,23 @@ export default function ProfilePage() {
     }
   }, []);
 
-  // ✅ ЛОГИ: Проверка авторизации
   useEffect(() => {
     console.log('🔍 [ProfilePage] Auth check useEffect running');
     console.log('🔍 [ProfilePage] Redux token:', token ? '✓' : '✗');
     console.log('🔍 [ProfilePage] Redux user:', user ? user.email : 'null');
     
-    // Проверяем токен: Redux + localStorage fallback
     const hasToken = token || (typeof window !== 'undefined' && localStorage.getItem('access_token'));
     console.log('🔍 [ProfilePage] hasToken (Redux OR localStorage):', hasToken ? '✓' : '✗');
     
     if (!hasToken) {
       console.log('🔍 [ProfilePage] ❌ NO TOKEN — redirecting to /auth');
-      router.push('/auth');
+      // ✅ Полная перезагрузка вместо router.push
+      if (typeof window !== 'undefined') {
+        window.location.href = '/auth';
+      }
     } else {
       console.log('🔍 [ProfilePage] ✅ TOKEN FOUND — allowing render');
       setAuthChecked(true);
-      
       if (user?.role === 'ADMIN') {
         console.log('🔍 [ProfilePage] Setting activeTab to "management" (ADMIN)');
         setActiveTab('management');
@@ -63,7 +65,6 @@ export default function ProfilePage() {
     }
   }, [token, user, router]);
 
-  // ✅ ЛОГИ: Загрузка корзины
   useEffect(() => {
     if (user?.role === 'CLIENT' && activeTab === 'cart') {
       console.log('🔍 [ProfilePage] Fetching cart for CLIENT');
@@ -71,13 +72,11 @@ export default function ProfilePage() {
     }
   }, [user, activeTab, dispatch]);
 
-  // ✅ Пока авторизация не проверена
   if (!authChecked) {
     console.log('🔍 [ProfilePage] Rendering: waiting for auth check...');
     return <div className="min-h-screen" />;
   }
 
-  // ✅ Если нет пользователя после проверки
   if (!user) {
     console.log('🔍 [ProfilePage] Rendering: token exists but user is null (waiting for sync)...');
     return (
