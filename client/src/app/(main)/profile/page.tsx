@@ -15,53 +15,73 @@ export default function ProfilePage() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   
-  // ✅ Состояние: завершена ли проверка авторизации
   const [authChecked, setAuthChecked] = useState(false);
-  
-  // ✅ Безопасное значение по умолчанию
   const [activeTab, setActiveTab] = useState<string>('cart');
 
-  // ✅ Проверка авторизации — ТОЛЬКО на клиенте
+  // ✅ ЛОГИ: При монтировании компонента
   useEffect(() => {
-    // Проверяем токен: сначала Redux, потом localStorage как fallback
+    console.log('🔍 [ProfilePage] Component mounted');
+    console.log('🔍 [ProfilePage] Initial Redux state:', { token: token ? '✓' : '✗', user: user ? user.email : null });
+    
+    if (typeof window !== 'undefined') {
+      const lsToken = localStorage.getItem('access_token');
+      const lsUser = localStorage.getItem('user');
+      console.log('🔍 [ProfilePage] localStorage:', { 
+        token: lsToken ? '✓ (' + lsToken.substring(0, 30) + '...)' : '✗',
+        user: lsUser ? '✓' : '✗'
+      });
+    }
+  }, []);
+
+  // ✅ ЛОГИ: Проверка авторизации
+  useEffect(() => {
+    console.log('🔍 [ProfilePage] Auth check useEffect running');
+    console.log('🔍 [ProfilePage] Redux token:', token ? '✓' : '✗');
+    console.log('🔍 [ProfilePage] Redux user:', user ? user.email : 'null');
+    
+    // Проверяем токен: Redux + localStorage fallback
     const hasToken = token || (typeof window !== 'undefined' && localStorage.getItem('access_token'));
+    console.log('🔍 [ProfilePage] hasToken (Redux OR localStorage):', hasToken ? '✓' : '✗');
     
     if (!hasToken) {
-      // Нет токена НИ в Redux, НИ в localStorage → редирект
+      console.log('🔍 [ProfilePage] ❌ NO TOKEN — redirecting to /auth');
       router.push('/auth');
     } else {
-      // Токен есть → разрешаем рендеринг контента
+      console.log('🔍 [ProfilePage] ✅ TOKEN FOUND — allowing render');
       setAuthChecked(true);
       
-      // Синхронизируем вкладку с ролью (если user уже в Redux)
       if (user?.role === 'ADMIN') {
+        console.log('🔍 [ProfilePage] Setting activeTab to "management" (ADMIN)');
         setActiveTab('management');
       }
     }
   }, [token, user, router]);
 
-  // ✅ Загрузка корзины для CLIENT
+  // ✅ ЛОГИ: Загрузка корзины
   useEffect(() => {
     if (user?.role === 'CLIENT' && activeTab === 'cart') {
+      console.log('🔍 [ProfilePage] Fetching cart for CLIENT');
       dispatch(fetchCart());
     }
   }, [user, activeTab, dispatch]);
 
-  // ✅ Пока авторизация не проверена — рендерим заглушку
-  // Это предотвращает редирект до того, как проверим localStorage
+  // ✅ Пока авторизация не проверена
   if (!authChecked) {
+    console.log('🔍 [ProfilePage] Rendering: waiting for auth check...');
     return <div className="min-h-screen" />;
   }
 
-  // ✅ Если после проверки нет пользователя в Redux — показываем лоадер
-  // (токен есть, но user ещё не загрузился — ждём синхронизации)
+  // ✅ Если нет пользователя после проверки
   if (!user) {
+    console.log('🔍 [ProfilePage] Rendering: token exists but user is null (waiting for sync)...');
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-gray-500">Загрузка...</div>
       </div>
     );
   }
+
+  console.log('🔍 [ProfilePage] Rendering: authenticated profile content');
 
   const isAdmin = user.role === 'ADMIN';
 
