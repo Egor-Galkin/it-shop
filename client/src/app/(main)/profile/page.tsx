@@ -15,17 +15,30 @@ export default function ProfilePage() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   
-  // ✅ useState импортирован напрямую из 'react'
-  const [activeTab, setActiveTab] = useState<string>(user?.role === 'ADMIN' ? 'management' : 'cart');
+  // ✅ Состояние: завершена ли проверка авторизации
+  const [authChecked, setAuthChecked] = useState(false);
+  
+  // ✅ Безопасное значение по умолчанию
+  const [activeTab, setActiveTab] = useState<string>('cart');
 
-  // ✅ Проверка авторизации — только на клиенте (в useEffect)
+  // ✅ Проверка авторизации — ТОЛЬКО на клиенте
   useEffect(() => {
-    // Если нет токена в Redux — редирект на логин
-    // Токен попадает в Redux через getInitialState() в auth.slice.ts
-    if (!token) {
+    // Проверяем токен: сначала Redux, потом localStorage как fallback
+    const hasToken = token || (typeof window !== 'undefined' && localStorage.getItem('access_token'));
+    
+    if (!hasToken) {
+      // Нет токена НИ в Redux, НИ в localStorage → редирект
       router.push('/auth');
+    } else {
+      // Токен есть → разрешаем рендеринг контента
+      setAuthChecked(true);
+      
+      // Синхронизируем вкладку с ролью (если user уже в Redux)
+      if (user?.role === 'ADMIN') {
+        setActiveTab('management');
+      }
     }
-  }, [token, router]);
+  }, [token, user, router]);
 
   // ✅ Загрузка корзины для CLIENT
   useEffect(() => {
@@ -34,10 +47,20 @@ export default function ProfilePage() {
     }
   }, [user, activeTab, dispatch]);
 
-  // ✅ Пока нет пользователя — рендерим ПРОСТУЮ заглушку
-  // Это предотвращает ошибку гидратации #418, т.к. сервер и клиент видят одинаковый HTML
-  if (!user) {
+  // ✅ Пока авторизация не проверена — рендерим заглушку
+  // Это предотвращает редирект до того, как проверим localStorage
+  if (!authChecked) {
     return <div className="min-h-screen" />;
+  }
+
+  // ✅ Если после проверки нет пользователя в Redux — показываем лоадер
+  // (токен есть, но user ещё не загрузился — ждём синхронизации)
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-gray-500">Загрузка...</div>
+      </div>
+    );
   }
 
   const isAdmin = user.role === 'ADMIN';
