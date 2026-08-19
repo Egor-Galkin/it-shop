@@ -1,9 +1,6 @@
-// ✅ Отключаем статическую генерацию
-export const dynamic = 'force-dynamic';
-export const fetchCache = 'force-no-store';
-export const revalidate = 0;
-
 'use client';
+// ✅ 'use client' — ВСЕГДА первая строка!
+
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
@@ -51,7 +48,7 @@ export default function ProfilePage() {
     
     if (!hasToken) {
       console.log('🔍 [ProfilePage] ❌ NO TOKEN — redirecting to /auth');
-      // ✅ Полная перезагрузка вместо router.push
+      // ✅ Полная перезагрузка вместо router.push (обходит Next.js server redirect)
       if (typeof window !== 'undefined') {
         window.location.href = '/auth';
       }
