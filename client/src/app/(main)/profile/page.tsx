@@ -1,6 +1,12 @@
 'use client';
 // ✅ 'use client' — ВСЕГДА первая строка!
 
+if (typeof window === 'undefined') {
+  console.log('🔍 [ProfilePage module] SERVER eval');
+} else {
+  console.log('🔍 [ProfilePage module] CLIENT eval');
+}
+
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
