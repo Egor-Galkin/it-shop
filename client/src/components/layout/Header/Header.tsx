@@ -14,9 +14,16 @@ export function Header() {
   const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
   
-  // ✅ Состояние для фиксации email при клике
+  // ✅ Флаг: компонент смонтирован на клиенте (предотвращает гидратацию)
+  const [isHydrated, setIsHydrated] = useState(false);
+  
   const [isEmailPinned, setIsEmailPinned] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+
+  // ✅ Устанавливаем isHydrated после монтирования
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   useEffect(() => {
     const footer = document.querySelector('footer');
@@ -91,7 +98,10 @@ export function Header() {
             >
               Каталог
             </Link>
-            {user && (
+            
+            {/* ✅ Рендерим ссылку "Профиль" ТОЛЬКО после гидратации */}
+            {/* Это предотвращает mismatch: сервер и клиент видят одинаковый HTML до isHydrated */}
+            {isHydrated && user && (
               <Link 
                 href="/profile" 
                 className={`${styles.navLink} ${isActive('/profile') ? styles.active : ''}`}
@@ -103,23 +113,21 @@ export function Header() {
         </div>
         
         <div className={styles.right}>
-          {user ? (
+          {/* ✅ Рендерим авторизованный блок ТОЛЬКО после гидратации */}
+          {isHydrated && user ? (
             <>
-              {/* ✅ Контейнер для иконки + email */}
               <div 
                 className={styles.userBlock}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 onClick={() => setIsEmailPinned(prev => !prev)}
               >
-                {/* ✅ Email слева от иконки (появляется при hover/pinned) */}
                 {showEmail && (
                   <span className={`${styles.userEmail} ${isEmailPinned ? styles.pinned : ''}`}>
                     {user.email}
                   </span>
                 )}
                 
-                {/* ✅ SVG-иконка пользователя */}
                 <button 
                   className={`${styles.userAvatar} ${isEmailPinned ? styles.pinned : ''}`}
                   aria-label={isEmailPinned ? 'Скрыть email' : 'Показать email'}

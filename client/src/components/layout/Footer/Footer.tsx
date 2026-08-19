@@ -1,4 +1,5 @@
 'use client';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAppSelector } from '@/store/hooks';
@@ -9,9 +10,19 @@ export function Footer() {
   const pathname = usePathname();
   const year = new Date().getFullYear();
   
-  const navHref = user ? '/profile' : '/auth';
+  // ✅ Флаг: компонент смонтирован на клиенте (предотвращает гидратацию)
+  const [isHydrated, setIsHydrated] = useState(false);
+  
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
   
   const isActive = (path: string) => pathname === path;
+
+  // ✅ Определяем href и текст ссылки ТОЛЬКО после гидратации
+  // До этого сервер и клиент видят одинаковый HTML
+  const navHref = isHydrated && user ? '/profile' : '/auth';
+  const navText = isHydrated && user ? 'Личный кабинет' : 'Войти';
 
   return (
     <footer className={styles.footer}>
@@ -32,7 +43,7 @@ export function Footer() {
             href={navHref} 
             className={`${styles.link} ${isActive(navHref) ? styles.active : ''}`}
           >
-            Личный кабинет
+            {navText}
           </Link>
         </div>
         <div className={styles.col}>
