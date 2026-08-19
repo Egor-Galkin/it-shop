@@ -11,6 +11,12 @@ import { HistoryTab } from './components/HistoryTab';
 import { PasswordTab } from './components/PasswordTab';
 
 export default function ProfilePage() {
+
+  // ✅ Этот лог сработает даже ДО любых хуков
+  if (typeof window !== 'undefined') {
+    console.log('🔍 [ProfilePage] >>> FUNCTION CALLED <<<');
+  }
+
   const { user, token } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const router = useRouter();
