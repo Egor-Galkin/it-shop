@@ -142,7 +142,7 @@ async function main() {
       (1, 'Камера', 'Основная 48 Мп + ультраширокая 12 Мп + телеобъектив 12 Мп', '${now}', '${now}'),
       (1, 'Память', '256 ГБ / 512 ГБ / 1 ТБ, 8 ГБ RAM', '${now}', '${now}'),
       (1, 'Аккумулятор', 'До 23 часов видео, быстрая зарядка 27 Вт', '${now}', '${now}')
-      ON CONFLICT DO NOTHING;
+      ON CONFLICT ("deviceId", title) DO NOTHING;
     `);
     console.log('Created device info');
 
@@ -151,7 +151,7 @@ async function main() {
       INSERT INTO "device_image" ("deviceId", img, "createdAt", "updatedAt") VALUES 
       (24, '/uploads/devices/airpodspro2.jpg', '${now}', '${now}'),
       (36, '/uploads/devices/f6161ef6-3277-4876-8fa0-173241c29363.jpg', '${now}', '${now}')
-      ON CONFLICT DO NOTHING;
+      ON CONFLICT ("deviceId", img) DO NOTHING;
     `);
     console.log('Created device images');
 
@@ -267,7 +267,7 @@ async function main() {
       (13, 24, 1),
       (20, 3, 2),
       (20, 7, 2)
-      ON CONFLICT DO NOTHING;
+      ON CONFLICT ("basketId", "deviceId") DO NOTHING;
     `);
     console.log('Created basket devices');
 
