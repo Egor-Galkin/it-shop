@@ -78,19 +78,21 @@
   background: var(--color-bg);
   border: 2px solid var(--color-border);
   border-radius: 1rem;
-  padding: 2rem;
-  min-height: 250px;
+  padding: 0;
+  min-height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
   flex: 0.95;
+  overflow: hidden;
+  aspect-ratio: 16/9;
   
   img {
     width: 100%;
-    max-width: 280px;
-    height: auto;
-    object-fit: contain;
+    height: 100%;
+    max-width: 100%;
+    object-fit: cover;
   }
 }
 

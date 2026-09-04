@@ -29,10 +29,10 @@ const advantages = [
 ];
 
 const categories = [
-  { name: 'Смартфоны', icon: '/display.svg', href: '/catalog?typeId=1' },
-  { name: 'Ноутбуки', icon: '/display.svg', href: '/catalog?typeId=2' },
-  { name: 'Планшеты', icon: '/display.svg', href: '/catalog?typeId=3' },
-  { name: 'Аксессуары', icon: '/display.svg', href: '/catalog?typeId=4' },
+  { name: 'Смартфоны', icon: '/smartphone.svg', href: '/catalog?typeId=1' },
+  { name: 'Ноутбуки', icon: '/laptop.svg', href: '/catalog?typeId=2' },
+  { name: 'Планшеты', icon: '/tablet.svg', href: '/catalog?typeId=3' },
+  { name: 'Аксессуары', icon: '/headphones.svg', href: '/catalog?typeId=4' },
 ];
 
 const stats = [
