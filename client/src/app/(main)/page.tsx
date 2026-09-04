@@ -9,22 +9,22 @@ const advantages = [
   { 
     title: 'Официальная гарантия', 
     desc: '2 года на всю технику от производителя. Сервисные центры по всей России.',
-    image: '/display.svg'
+    image: '/advantage1.png'
   },
   { 
     title: 'Быстрая доставка', 
     desc: 'По России за 1-3 дня. Бесплатная доставка при заказе от 5000 ₽.',
-    image: '/display.svg'
+    image: '/advantage2.png'
   },
   { 
     title: 'Удобная оплата', 
     desc: 'Принимаем карты, наличные, рассрочка 0-0-12 без переплат и скрытых комиссий.',
-    image: '/display.svg'
+    image: '/advantage3.png'
   },
   { 
     title: 'Лёгкий возврат', 
     desc: '14 дней на обмен или возврат без лишних вопросов и бюрократии.',
-    image: '/display.svg'
+    image: '/advantage4.png'
   },
 ];
 
