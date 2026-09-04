@@ -47,7 +47,6 @@ export class DevicesController {
     return this.devicesService.remove(+id);
   }
 
-  // ✅ Обновление основного изображения (загрузка файла)
   @Patch(':id/image')
   @UseInterceptors(FileInterceptor('file', multerConfig))
   @Roles(Role.ADMIN)
@@ -56,7 +55,6 @@ export class DevicesController {
     return this.devicesService.updateMainImage(+id, file);
   }
 
-  // ✅ Добавление доп. изображения (загрузка файла)
   @Post(':id/images')
   @UseInterceptors(FileInterceptor('file', multerConfig))
   @Roles(Role.ADMIN)
@@ -65,7 +63,6 @@ export class DevicesController {
     return this.devicesService.addDeviceImage(+id, file);
   }
 
-  // ✅ Удаление доп. изображения (с очисткой файла)
   @Delete(':id/images/:imageId')
   @Roles(Role.ADMIN)
   async deleteDeviceImage(@Param('id') deviceId: string, @Param('imageId') imageId: string) {

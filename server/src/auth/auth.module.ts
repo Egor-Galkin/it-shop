@@ -17,7 +17,6 @@ import { PrismaModule } from '../prisma/prisma.module';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
-        // Явно указываем типы и дефолты
         const secret = configService.get<string>('JWT_SECRET') || 'fallback_secret';
         const expiresIn = configService.get<string>('JWT_EXPIRES_IN') || '7d';
         
@@ -34,12 +33,10 @@ import { PrismaModule } from '../prisma/prisma.module';
   providers: [
     AuthService,
     JwtStrategy,
-    // Глобальный guard: защищает ВСЕ маршруты по умолчанию
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
-    // Guard для проверки ролей (используется через декоратор @Roles)
     {
       provide: APP_GUARD,
       useClass: RolesGuard,

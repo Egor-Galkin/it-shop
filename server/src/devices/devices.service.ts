@@ -11,15 +11,12 @@ import { join } from 'path';
 @Injectable()
 export class DevicesService {
   constructor(private prisma: PrismaService) {
-    // Создаём папку uploads/devices если не существует
     if (!existsSync(UPLOADS_DIR)) {
       mkdirSync(UPLOADS_DIR, { recursive: true });
     }
   }
 
-  // ✅ Создание товара: сначала основной, потом связанные данные
   async create(dto: CreateDeviceDto) {
-    // 1. Создаём основной товар без deviceInfos
     const { deviceInfos, ...mainData } = dto;
     
     const device = await this.prisma.device.create({
@@ -33,7 +30,6 @@ export class DevicesService {
       },
     });
 
-    // 2. Если есть характеристики — создаём их отдельным запросом
     if (deviceInfos?.length) {
       const cleanInfos = deviceInfos
         .filter((info: any) => info.title?.trim() && info.description?.trim())
@@ -50,7 +46,6 @@ export class DevicesService {
       }
     }
 
-    // 3. Возвращаем товар с включёнными связями
     return this.findOne(device.id);
   }
 
@@ -122,9 +117,7 @@ export class DevicesService {
     };
   }
 
-  // ✅ findOne: проверка валидности id
   async findOne(id: number) {
-    // Проверка на валидный id
     if (!id || isNaN(id)) {
       throw new BadRequestException('Invalid device ID');
     }
@@ -136,7 +129,7 @@ export class DevicesService {
         type: { select: { name: true } }, 
         brand: { select: { name: true } }, 
         deviceImages: true,
-        discounts: true, // ✅ Добавляем скидки для админки
+        discounts: true,
       },
     });
     
@@ -160,14 +153,11 @@ export class DevicesService {
     };
   }
 
-  // ✅ Обновление: проверка существования + корректная обработка deviceInfos
   async update(id: number, dto: UpdateDeviceDto) {
-    // Проверка на валидный id
     if (!id || isNaN(id)) {
       throw new BadRequestException('Invalid device ID');
     }
     
-    // Проверяем существование товара
     const existing = await this.prisma.device.findUnique({ where: { id } });
     if (!existing) {
       throw new NotFoundException(`Device with ID ${id} not found`);
@@ -175,7 +165,6 @@ export class DevicesService {
 
     const { deviceInfos, ...mainData } = dto;
     
-    // 1. Обновляем основные данные товара
     const updated = await this.prisma.device.update({
       where: { id },
       data: {
@@ -183,18 +172,15 @@ export class DevicesService {
         price: mainData.price,
         typeId: mainData.typeId,
         brandId: mainData.brandId,
-        img: mainData.img === '' ? null : mainData.img, // Пустая строка = null
+        img: mainData.img === '' ? null : mainData.img,
         rating: mainData.rating,
       },
       include: { deviceInfos: true, type: { select: { name: true } }, brand: { select: { name: true } } },
     });
 
-    // 2. Если переданы характеристики — полностью перезаписываем их
     if (deviceInfos !== undefined) {
-      // Удаляем старые характеристики
       await this.prisma.deviceInfo.deleteMany({ where: { deviceId: id } });
       
-      // Создаём новые (только заполненные)
       const cleanInfos = deviceInfos
         .filter((info: any) => info.title?.trim() && info.description?.trim())
         .map((info: any) => ({
@@ -210,24 +196,19 @@ export class DevicesService {
       }
     }
 
-    // 3. Возвращаем обновлённый товар
     return this.findOne(id);
   }
 
-  // ✅ Удаление: каскадное через Prisma + очистка файлов
   async remove(id: number) {
-    // Проверка на валидный id
     if (!id || isNaN(id)) {
       throw new BadRequestException('Invalid device ID');
     }
     
-    // Проверяем существование
     const device = await this.prisma.device.findUnique({ where: { id } });
     if (!device) {
       throw new NotFoundException(`Device with ID ${id} not found`);
     }
 
-    // Проверка на отзывы и заказы (бизнес-логика)
     const reviewCount = await this.prisma.rating.count({ where: { deviceId: id } });
     if (reviewCount > 0) {
       throw new BadRequestException(`Нельзя удалить: у товара есть отзывы (${reviewCount})`);
@@ -238,14 +219,11 @@ export class DevicesService {
       throw new BadRequestException(`Нельзя удалить: товар находится в корзинах/заказах (${basketCount})`);
     }
 
-    // ✅ Удаляем все изображения товара (файлы + записи в БД)
     await this.deleteDeviceImages(id);
 
-    // ✅ Prisma автоматически удалит связанные записи благодаря onDelete: Cascade
     return this.prisma.device.delete({ where: { id } });
   }
 
-  // ✅ Обновление основного изображения
   async updateMainImage(deviceId: number, file: Express.Multer.File): Promise<{ img: string }> {
     if (!deviceId || isNaN(deviceId)) {
       throw new BadRequestException('Invalid device ID');
@@ -262,7 +240,6 @@ export class DevicesService {
       select: { id: true, img: true }
     });
 
-    // Удаляем старый файл, если он не используется
     if (oldImagePath && oldImagePath !== '/display.svg') {
       const isUsed = await isImageUsed(this.prisma, oldImagePath, deviceId);
       if (!isUsed) {
@@ -273,13 +250,12 @@ export class DevicesService {
     return { img: updated.img! };
   }
 
-  // ✅ Добавление доп. изображения
   async addDeviceImage(deviceId: number, file: Express.Multer.File) {
     if (!deviceId || isNaN(deviceId)) {
       throw new BadRequestException('Invalid device ID');
     }
     
-    await this.findOne(deviceId); // Проверка существования
+    await this.findOne(deviceId);
     const imageUrl = `/uploads/devices/${file.filename}`;
     
     return this.prisma.deviceImage.create({
@@ -287,7 +263,6 @@ export class DevicesService {
     });
   }
 
-  // ✅ Удаление доп. изображения
   async removeDeviceImage(deviceId: number, imageId: number) {
     if (!deviceId || !imageId || isNaN(deviceId) || isNaN(imageId)) {
       throw new BadRequestException('Invalid ID');
@@ -300,10 +275,8 @@ export class DevicesService {
 
     const imagePath = image.img;
     
-    // Сначала удаляем запись из БД
     await this.prisma.deviceImage.delete({ where: { id: imageId } });
 
-    // Удаляем файл, если он не используется
     if (imagePath) {
       const isUsed = await isImageUsed(this.prisma, imagePath, deviceId);
       if (!isUsed) {
@@ -314,7 +287,6 @@ export class DevicesService {
     return { message: 'Image deleted' };
   }
 
-  // ✅ Удаление всех изображений товара (при удалении товара)
   private async deleteDeviceImages(deviceId: number) {
     const device = await this.prisma.device.findUnique({
       where: { id: deviceId },
@@ -323,7 +295,6 @@ export class DevicesService {
 
     if (!device) return;
 
-    // Обрабатываем основное изображение
     if (device.img && device.img !== '/display.svg') {
       const isUsed = await isImageUsed(this.prisma, device.img, deviceId);
       if (!isUsed) {
@@ -331,7 +302,6 @@ export class DevicesService {
       }
     }
 
-    // Обрабатываем дополнительные изображения
     for (const extraImg of device.deviceImages) {
       if (extraImg.img) {
         const isUsed = await isImageUsed(this.prisma, extraImg.img, deviceId);
@@ -341,8 +311,6 @@ export class DevicesService {
       }
     }
 
-    // Удаляем записи из БД (Prisma сделает это автоматически при onDelete: Cascade,
-    // но для надёжности делаем явно)
     await this.prisma.deviceImage.deleteMany({ where: { deviceId } });
   }
 }

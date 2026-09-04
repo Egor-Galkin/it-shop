@@ -10,7 +10,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   canActivate(context: ExecutionContext) {
-    // Проверяем, помечен ли маршрут как публичный
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
@@ -21,7 +20,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 
-  // Обработка ошибок аутентификации
   handleRequest(err: any, user: any) {
     if (err || !user) throw err || new UnauthorizedException('Invalid or expired token');
     return user;

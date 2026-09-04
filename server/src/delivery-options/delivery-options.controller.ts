@@ -10,14 +10,12 @@ import { Public } from '../auth/public.decorator';
 export class DeliveryOptionsController {
   constructor(private readonly deliveryOptionsService: DeliveryOptionsService) {}
 
-  // [ADMIN] CRUD
   @Post()
   @Roles(Role.ADMIN)
   create(@Body() createDeliveryOptionDto: CreateDeliveryOptionDto) {
     return this.deliveryOptionsService.create(createDeliveryOptionDto);
   }
 
-  // ✅ Админ-список с сортировкой
   @Get('admin')
   @Roles(Role.ADMIN)
   async getAdminList(@Query() query: any) {
@@ -53,7 +51,6 @@ export class DeliveryOptionsController {
     return this.deliveryOptionsService.remove(numericId);
   }
 
-  // [CLIENT] Получить доступные варианты
   @Get('client/available')
   @Public()
   getAvailableForClient() {

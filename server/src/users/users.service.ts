@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Prisma } from '@prisma/client'; // ✅ Импортируем Prisma namespace для типов
+import { Prisma } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { QueryUsersDto } from './dto/query-users.dto';
@@ -11,25 +11,21 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  // Хеширование пароля
   private async hashPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt(10);
     return bcrypt.hash(password, salt);
   }
 
-  // Сравнение пароля
   async comparePassword(password: string, hashed: string): Promise<boolean> {
     return bcrypt.compare(password, hashed);
   }
 
-  // Регистрация нового пользователя
   async create(createUserDto: CreateUserDto) {
     const exists = await this.prisma.user.findUnique({ where: { email: createUserDto.email } });
     if (exists) throw new ConflictException('User with this email already exists');
 
     const hashedPassword = await this.hashPassword(createUserDto.password);
 
-    // Явно исключаем поле id, если оно вдруг пришло из фронтенда
     const { id, ...safeData } = createUserDto as any;
     
     return this.prisma.user.create({
@@ -42,21 +38,18 @@ export class UsersService {
     });
   }
 
-  // ✅ Получение пользователей с пагинацией, поиском, сортировкой и _count
   async findAll(query: QueryUsersDto) {
     const { page = 1, limit = 10, search, role = 'CLIENT', orderBy = 'createdAt', orderDir = 'desc' } = query;
     const skip = (page - 1) * limit;
 
-    const where: any = { role }; // По умолчанию только CLIENT
+    const where: any = { role };
     if (search) {
       where.email = { contains: search, mode: 'insensitive' };
     }
 
-    // ✅ Сортировка: для ratings/orders — клиентская, остальные — через Prisma
     const serverSortableFields = ['id', 'email', 'createdAt'];
     
-    // ✅ Правильная типизация orderBy для Prisma через Prisma.UserOrderByWithRelationInput
-    let prismaOrderBy: Prisma.UserOrderByWithRelationInput = { createdAt: 'desc' }; // fallback
+    let prismaOrderBy: Prisma.UserOrderByWithRelationInput = { createdAt: 'desc' };
     if (serverSortableFields.includes(orderBy) && orderDir) {
       prismaOrderBy = { [orderBy]: orderDir as Prisma.SortOrder };
     }
@@ -72,7 +65,7 @@ export class UsersService {
           _count: {
             select: {
               ratings: true,
-              baskets: { where: { paidAt: { not: null } } }, // Только оплаченные заказы
+              baskets: { where: { paidAt: { not: null } } },
             },
           },
         },
@@ -83,11 +76,9 @@ export class UsersService {
       this.prisma.user.count({ where }),
     ]);
 
-    // ✅ Клиентская сортировка для ratings/orders
     let sortedUsers = users;
     if (!serverSortableFields.includes(orderBy) && orderDir) {
       const multiplier = orderDir === 'asc' ? 1 : -1;
-      // ✅ Приводим к any для доступа к _count (Prisma не включает _count в тип по умолчанию)
       sortedUsers = [...users].sort((a: any, b: any) => {
         if (orderBy === 'ratings') {
           return ((a._count?.ratings || 0) - (b._count?.ratings || 0)) * multiplier;
@@ -110,7 +101,6 @@ export class UsersService {
     };
   }
 
-  // Получение пользователя по ID
   async findOne(id: number) {
     const user = await this.prisma.user.findUnique({
       where: { id },
@@ -120,16 +110,13 @@ export class UsersService {
     return user;
   }
 
-  // Поиск по email (для авторизации)
   async findByEmail(email: string) {
     return this.prisma.user.findUnique({ where: { email } });
   }
 
-  // Обновление данных пользователя
   async update(id: number, updateUserDto: UpdateUserDto) {
     await this.findOne(id);
     
-    // Если меняется email — проверяем на уникальность
     if (updateUserDto.email) {
       const exists = await this.prisma.user.findFirst({
         where: { email: updateUserDto.email, NOT: { id } },
@@ -144,7 +131,6 @@ export class UsersService {
     });
   }
 
-  // Изменение пароля
   async changePassword(id: number, oldPassword: string, newPassword: string) {
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user) throw new NotFoundException('User not found');
@@ -160,11 +146,9 @@ export class UsersService {
     });
   }
 
-  // Удаление пользователя
   async remove(id: number) {
     await this.findOne(id);
     
-    // Проверка: нельзя удалить, если есть отзывы или заказы
     const ratingsCount = await this.prisma.rating.count({ where: { userId: id } });
     if (ratingsCount > 0) {
       throw new BadRequestException(`Нельзя удалить: у пользователя есть отзывы (${ratingsCount})`);
@@ -181,9 +165,8 @@ export class UsersService {
     return { message: `User ${id} deleted successfully` };
   }
 
-  // ✅ Получение отзывов пользователя
   async getUserReviews(userId: number) {
-    await this.findOne(userId); // Проверка существования
+    await this.findOne(userId);
     
     return this.prisma.rating.findMany({
       where: { userId },
@@ -194,14 +177,13 @@ export class UsersService {
     });
   }
 
-  // ✅ Получение истории заказов пользователя (только оплаченные)
   async getUserOrders(userId: number, limit = 100) {
     await this.findOne(userId);
     
     const baskets = await this.prisma.basket.findMany({
       where: { 
         userId, 
-        paidAt: { not: null } // Только оплаченные заказы
+        paidAt: { not: null }
       },
       include: {
         devices: {
@@ -224,15 +206,12 @@ export class UsersService {
       take: limit,
     });
 
-    // ✅ Рассчитываем total и скидку для каждого товара
     const ordersWithDetails = baskets.map(basket => {
-      // ✅ paidAt не может быть null из-за where: { paidAt: { not: null } }
       const paidAt = basket.paidAt!;
       
       const devicesWithDiscount = basket.devices.map(bd => {
         const basePrice = Number(bd.device.price);
         
-        // Находим активную скидку на момент оплаты
         const activeDiscount = bd.device.discounts?.find(d => {
           const start = new Date(d.dateStart);
           const end = new Date(d.dateEnd);
@@ -258,7 +237,6 @@ export class UsersService {
         };
       });
       
-      // Считаем итог
       const itemsTotal = devicesWithDiscount.reduce((sum, d) => sum + d.lineTotal, 0);
       const deliveryCost = basket.deliveryOption?.type === 'DELIVERY' && basket.deliveryOption.price
         ? Number(basket.deliveryOption.price)
@@ -274,7 +252,6 @@ export class UsersService {
     return ordersWithDetails;
   }
 
-  // ✅ Toggle доставки заказа (выдать/отменить)
   async toggleDelivery(basketId: number, deliveredAt: string | null) {
     const basket = await this.prisma.basket.findUnique({
       where: { id: basketId },

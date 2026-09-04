@@ -19,7 +19,6 @@ import { Public } from '../auth/public.decorator';
 export class TypesController {
   constructor(private readonly typesService: TypesService) {}
 
-  // Только ADMIN может создавать тип
   @Post()
   @Roles(Role.ADMIN)
   create(@Body() createTypeDto: CreateTypeDto) {
@@ -38,14 +37,12 @@ export class TypesController {
     return this.typesService.findOne(+id);
   }
 
-  // Только ADMIN может обновлять тип
   @Patch(':id')
   @Roles(Role.ADMIN)
   update(@Param('id') id: string, @Body() updateTypeDto: UpdateTypeDto) {
     return this.typesService.update(+id, updateTypeDto);
   }
 
-  // Только ADMIN может удалять тип
   @Delete(':id')
   @Roles(Role.ADMIN)
   remove(@Param('id') id: string) {

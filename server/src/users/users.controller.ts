@@ -29,7 +29,6 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  // ✅ GET /users?role=CLIENT&page=1&limit=10&search=email&orderBy=email&orderDir=asc
   @Get()
   @Roles(Role.ADMIN)
   findAll(@Query() query: QueryUsersDto) {
@@ -53,7 +52,6 @@ export class UsersController {
     return this.usersService.remove(+id);
   }
 
-  // 🔐 Смена пароля
   @Patch(':id/password')
   async changePassword(
     @Param('id') id: string,
@@ -70,14 +68,12 @@ export class UsersController {
     return this.usersService.changePassword(userId, dto.oldPassword, dto.newPassword);
   }
 
-  // ✅ GET /users/:id/reviews — отзывы пользователя
   @Get(':id/reviews')
   @Roles(Role.ADMIN)
   getUserReviews(@Param('id') id: string) {
     return this.usersService.getUserReviews(+id);
   }
 
-  // ✅ GET /users/:id/orders — история заказов пользователя (оплаченные)
   @Get(':id/orders')
   @Roles(Role.ADMIN)
   getUserOrders(@Param('id') id: string, @Query('limit') limit?: string) {

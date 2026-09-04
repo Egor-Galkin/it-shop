@@ -13,5 +13,5 @@ export class CreateUserDto {
 
   @IsEnum(Role)
   @IsOptional()
-  role?: Role; // По умолчанию будет 'CLIENT'
+  role?: Role;
 }

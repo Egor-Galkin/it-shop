@@ -14,7 +14,6 @@ async function bootstrap() {
     forbidNonWhitelisted: true,
   }));
 
-  // РАЗРЕШАЕМ CORS (добавь эту строку!)
   app.enableCors({
     origin: [
       'http://localhost:3000',
@@ -27,7 +26,6 @@ async function bootstrap() {
     allowedHeaders: 'Content-Type, Authorization',
   });
 
-  // Раздаём папку uploads по пути /uploads
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {
     prefix: '/uploads',
   });

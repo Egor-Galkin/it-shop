@@ -4,16 +4,13 @@ export class CreateRatingDto {
   @IsInt()
   @Min(1)
   @Max(5)
-  rate!: number; // Оценка от 1 до 5
+  rate!: number;
 
   @IsInt()
-  deviceId!: number; // ID товара
-
-  // userId НЕ передаётся клиентом — берётся из токена (безопасность!)
+  deviceId!: number;
 
   @IsString()
   @IsOptional()
-  description?: string; // Опциональный текст отзыва
+  description?: string;
 
-  // hidden НЕ передаётся клиентом — только админ может менять
 }

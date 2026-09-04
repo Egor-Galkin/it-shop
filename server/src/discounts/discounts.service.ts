@@ -43,7 +43,6 @@ export class DiscountsService {
     return this.prisma.discount.delete({ where: { id } });
   }
 
-  // ✅ Получить активную скидку для конкретного товара
   async getActiveDiscount(deviceId: number) {
     const now = new Date();
     return this.prisma.discount.findFirst({
@@ -55,7 +54,6 @@ export class DiscountsService {
     });
   }
 
-  // ✅ Массовое получение активных скидок для списка товаров
   async getActiveDiscountsForDevices(deviceIds: number[]) {
     if (deviceIds.length === 0) return [];
     const now = new Date();

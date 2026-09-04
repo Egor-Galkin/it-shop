@@ -46,7 +46,6 @@ export class DeviceImagesController {
     return this.deviceImagesService.remove(+id);
   }
 
-  // ✅ Загрузка дополнительного изображения для устройства
   @Post('upload/:deviceId')
   @UseInterceptors(FileInterceptor('file', multerConfig))
   @Roles(Role.ADMIN)
@@ -64,7 +63,6 @@ export class DeviceImagesController {
     });
   }
 
-  // ✅ Удалить все изображения устройства
   @Delete('device/:deviceId')
   @Roles(Role.ADMIN)
   async deleteByDevice(@Param('deviceId') deviceId: string) {

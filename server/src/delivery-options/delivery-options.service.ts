@@ -7,7 +7,6 @@ import { UpdateDeliveryOptionDto } from './dto/update-delivery-option.dto';
 export class DeliveryOptionsService {
   constructor(private prisma: PrismaService) {}
 
-  // ✅ Проверка уникальности sortOrder
   private async isSortOrderUnique(sortOrder: number, excludeId?: number): Promise<boolean> {
     const where: any = { sortOrder };
     if (excludeId) where.id = { not: excludeId };
@@ -15,18 +14,14 @@ export class DeliveryOptionsService {
     return count === 0;
   }
 
-  // ✅ Проверка: используется ли вариант в заказах
   async isUsedInOrders(id: number): Promise<boolean> {
     const count = await this.prisma.basket.count({ where: { deliveryOptionId: id } });
     return count > 0;
   }
 
-  // ✅ Создание: явно создаём объект data только с разрешёнными полями
-  // Это гарантирует, что id (если он пришёл) не попадёт в Prisma
   create(dto: CreateDeliveryOptionDto) {
     const data: any = {};
     
-    // Копируем только разрешённые поля
     if (dto.name) data.name = dto.name;
     if (dto.type) data.type = dto.type;
     if (dto.type === 'DELIVERY' && dto.price !== undefined) data.price = dto.price;
@@ -35,7 +30,6 @@ export class DeliveryOptionsService {
     if (dto.isActive !== undefined) data.isActive = dto.isActive;
     if (dto.sortOrder !== undefined) data.sortOrder = dto.sortOrder;
     
-    // ✅ Значения по умолчанию
     if (!data.name && data.type) {
       data.name = data.type === 'DELIVERY' ? 'Доставка' : 'Самовывоз';
     }
@@ -47,7 +41,6 @@ export class DeliveryOptionsService {
     return this.prisma.deliveryOption.create({ data });
   }
 
-  // ✅ Админ-список с сортировкой и _count
   async getAdminList(query: any) {
     const { orderBy = 'sortOrder', orderDir = 'asc' } = query;
     
@@ -81,7 +74,6 @@ export class DeliveryOptionsService {
     const current = await this.prisma.deliveryOption.findUnique({ where: { id } });
     const newType = dto.type || current?.type;
     
-    // ✅ Валидация sortOrder
     if (dto.sortOrder !== undefined && !(await this.isSortOrderUnique(dto.sortOrder, id))) {
       throw new ConflictException(`Sort order ${dto.sortOrder} is already used`);
     }
@@ -103,7 +95,6 @@ export class DeliveryOptionsService {
   async remove(id: number) {
     await this.findOne(id);
     
-    // ✅ Проверка: нельзя удалить, если используется в заказах
     if (await this.isUsedInOrders(id)) {
       throw new BadRequestException('Нельзя удалить: вариант используется в заказах');
     }
@@ -111,7 +102,6 @@ export class DeliveryOptionsService {
     return this.prisma.deliveryOption.delete({ where: { id } });
   }
 
-  // ✅ Получить доступные варианты для клиента
   async getAvailableForClient() {
     return this.prisma.deliveryOption.findMany({
       where: { isActive: true },
@@ -127,7 +117,6 @@ export class DeliveryOptionsService {
     });
   }
 
-  // ✅ Рассчитать стоимость доставки для корзины
   async calculateDeliveryCost(deliveryOptionId: number | null): Promise<number> {
     if (!deliveryOptionId) return 0;
     

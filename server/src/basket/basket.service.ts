@@ -64,7 +64,6 @@ export class BasketService {
       });
     }
 
-    // ✅ Рассчитываем calculatedPrice для каждого товара
     const now = new Date();
     const devicesWithPrices = await Promise.all(
       basket.devices.map(async (bd) => {
@@ -86,10 +85,9 @@ export class BasketService {
       })
     );
 
-    // ✅ Явно возвращаем deliveryOptionId на верхнем уровне
     return { 
       ...basket, 
-      deliveryOptionId: basket.deliveryOptionId, // ✅ Это ключевое исправление!
+      deliveryOptionId: basket.deliveryOptionId,
       devices: devicesWithPrices 
     };
   }
@@ -207,7 +205,6 @@ export class BasketService {
     return { message: 'Basket cleared' };
   }
 
-  // ✅ Установить способ получения — с явным возвратом deliveryOptionId
   async setDeliveryOption(userId: number, deliveryOptionId: number | null) {
     const basket = await this.getOrCreateActive(userId);
     
@@ -246,7 +243,6 @@ export class BasketService {
       }
     });
 
-    // ✅ Явно возвращаем deliveryOptionId
     return { 
       ...updated, 
       deliveryOptionId: updated.deliveryOptionId 
@@ -368,7 +364,6 @@ export class BasketService {
       }
     });
 
-    // ✅ Возвращаем deliveryOptionId для истории
     return { 
       ...paidBasket, 
       deliveryOptionId: paidBasket.deliveryOptionId,
@@ -445,7 +440,7 @@ export class BasketService {
       
       return {
         ...order,
-        deliveryOptionId: order.deliveryOptionId, // ✅ Явно возвращаем ID
+        deliveryOptionId: order.deliveryOptionId,
         devices: itemsWithPrices,
         total: Number(total.toFixed(2)),
         deliveryStatus: order.deliveryOption?.type === 'PICKUP' 
@@ -493,7 +488,7 @@ export class BasketService {
 
     return { 
       ...updated, 
-      deliveryOptionId: updated.deliveryOptionId // ✅ Возвращаем ID
+      deliveryOptionId: updated.deliveryOptionId
     };
   }
 
@@ -523,7 +518,6 @@ export class BasketService {
       orderBy: { createdAt: 'desc' },
       take: query.limit || 20
     }).then(baskets => 
-      // ✅ Маппим, чтобы добавить deliveryOptionId на верхний уровень
       baskets.map(b => ({ ...b, deliveryOptionId: b.deliveryOptionId }))
     );
   }
@@ -543,7 +537,6 @@ export class BasketService {
     });
     if (!basket) throw new NotFoundException(`Basket with ID ${id} not found`);
     
-    // ✅ Возвращаем с deliveryOptionId
     return { ...basket, deliveryOptionId: basket.deliveryOptionId };
   }
 
@@ -924,7 +917,6 @@ export class BasketService {
     };
   }
 
-  // ✅ Распределение заказов по типу доставки/самовывозу (только оплаченные с указанной доставкой)
   async getStatsByDelivery() {
     const baskets = await this.prisma.basket.findMany({
       where: { 
@@ -954,7 +946,6 @@ export class BasketService {
     return Object.values(counts).sort((a, b) => b.value - a.value);
   }
 
-  // ✅ График заказов по датам с фильтром по типу доставки
   async getTimelineByDelivery(
     startDateStr: string, 
     endDateStr: string, 
@@ -984,7 +975,6 @@ export class BasketService {
       byDay[day] = (byDay[day] || 0) + 1;
     });
     
-    // Заполняем все дни в диапазоне (даже с 0)
     const days: { date: string; value: number }[] = [];
     const currentDate = new Date(startDate);
     while (currentDate <= endDate) {
@@ -999,7 +989,6 @@ export class BasketService {
     return days;
   }
 
-  // ✅ Toggle доставки заказа (выдать/отменить)
   async toggleDelivery(basketId: number, deliveredAt: string | null) {
     const basket = await this.prisma.basket.findUnique({
       where: { id: basketId },
@@ -1019,25 +1008,21 @@ export class BasketService {
     });
   }
 
-  // ✅ Добавьте этот метод в конец класса BasketService
   async getAdminOrders(query: any) {
     const { page = 1, limit = 10, search, status, orderBy = 'paidAt', orderDir = 'desc' } = query;
     const skip = (Number(page) - 1) * Number(limit);
 
-    const where: any = { paidAt: { not: null } }; // Только оплаченные
+    const where: any = { paidAt: { not: null } };
     
-    // Поиск по email покупателя
     if (search) where.user = { email: { contains: search, mode: 'insensitive' } };
     
-    // Фильтр по статусу
     if (status === 'pending') where.deliveredAt = null;
     if (status === 'delivered') where.deliveredAt = { not: null };
 
-    // Сортировка (только безопасные поля для Prisma)
     const orderClause: any = {};
     if (orderBy === 'email') orderClause.user = { email: orderDir };
     else if (['id', 'paidAt', 'createdAt'].includes(orderBy)) orderClause[orderBy] = orderDir;
-    else orderClause.paidAt = 'desc'; // fallback
+    else orderClause.paidAt = 'desc';
 
     const [orders, total] = await Promise.all([
       this.prisma.basket.findMany({
@@ -1060,7 +1045,6 @@ export class BasketService {
       this.prisma.basket.count({ where }),
     ]);
 
-    // ✅ Расчёт итогов и скидок (аналогично getUserOrders)
     const enriched = orders.map(basket => {
       const paidAt = basket.paidAt!;
       let itemsTotal = 0;

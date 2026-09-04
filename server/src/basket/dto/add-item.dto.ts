@@ -8,5 +8,5 @@ export class AddItemDto {
   @IsOptional()
   @IsInt()
   @Min(1)
-  quantity?: number; // Если не передано — добавляем 1, если есть — увеличиваем
+  quantity?: number;
 }

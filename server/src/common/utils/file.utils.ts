@@ -3,12 +3,8 @@ import { join, basename } from 'path';
 
 export const UPLOADS_DIR = join(process.cwd(), 'uploads', 'devices');
 
-/**
- * Удаляет файл по пути (относительно /uploads/devices/)
- */
 export function deleteFile(filePath: string): boolean {
   try {
-    // Преобразуем "/uploads/devices/image.jpg" → "image.jpg"
     const fileName = basename(filePath);
     const fullPath = join(UPLOADS_DIR, fileName);
     
@@ -23,15 +19,11 @@ export function deleteFile(filePath: string): boolean {
   }
 }
 
-/**
- * Проверяет, используется ли изображение другими товарами
- */
 export async function isImageUsed(
   prisma: any,
   imagePath: string,
   excludeDeviceId?: number
 ): Promise<boolean> {
-  // Проверяем основное изображение
   const usedAsMain = await prisma.device.count({
     where: {
       img: imagePath,
@@ -39,7 +31,6 @@ export async function isImageUsed(
     },
   });
 
-  // Проверяем дополнительные изображения
   const usedAsExtra = await prisma.deviceImage.count({
     where: {
       img: imagePath,

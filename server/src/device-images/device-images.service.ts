@@ -40,7 +40,6 @@ export class DeviceImagesService {
     return this.prisma.deviceImage.delete({ where: { id } });
   }
 
-  // ✅ Удалить все изображения устройства (полезно при обновлении)
   async deleteByDeviceId(deviceId: number) {
     return this.prisma.deviceImage.deleteMany({ where: { deviceId } });
   }

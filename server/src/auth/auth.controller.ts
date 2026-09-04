@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { LoginUserDto } from '../users/dto/login-user.dto';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
-import { Public } from './public.decorator'; // Создадим ниже
+import { Public } from './public.decorator';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { JwtAuthGuard } from './auth.guard';
 import { Request } from 'express';
@@ -15,16 +15,13 @@ export class AuthController {
     private usersService: UsersService,
   ) {}
 
-  // Регистрация (публичный эндпоинт)
   @Public()
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   register(@Body() dto: CreateUserDto) {
-    // При регистрации через auth роль всегда будет CLIENT (защита от эскалации привилегий)
     return this.usersService.create({ ...dto, role: undefined });
   }
 
-  // Вход (публичный эндпоинт)
   @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)

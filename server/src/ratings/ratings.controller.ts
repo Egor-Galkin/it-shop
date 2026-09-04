@@ -18,9 +18,8 @@ import { QueryRatingDto } from './dto/query-rating.dto';
 import { Roles } from '../auth/roles.guard';
 import { Role } from '../common/enums/role.enum';
 import { Request } from 'express';
-import { Public } from '../auth/public.decorator'; // или из auth.controller
+import { Public } from '../auth/public.decorator';
 
-// Тип для req.user
 type RequestWithUser = Request & { user?: { id: number; role: Role } };
 
 @Controller('ratings')
@@ -33,7 +32,6 @@ export class RatingsController {
     return this.ratingsService.create(req.user.id, createRatingDto);
   }
 
-  // ✅ Публичные маршруты
   @Get()
   @Public()
   findAll(@Query() query: QueryRatingDto, @Req() req: RequestWithUser) {
@@ -48,18 +46,15 @@ export class RatingsController {
     return this.ratingsService.findByDevice(+deviceId);
   }
 
-  // ✅ ВАЖНО: Специфичный маршрут /ratings/admin должен идти ПЕРЕД /ratings/:id
   @Get('admin')
   @Roles(Role.ADMIN)
   async getAdminReviews(@Query() query: any) {
     return this.ratingsService.getAdminReviews(query);
   }
 
-  // ✅ Параметризованный маршрут — в конце
   @Get(':id')
   @Public()
   findOne(@Param('id') id: string, @Req() req: RequestWithUser) {
-    // ✅ Защита от невалидного ID
     const numericId = +id;
     if (!id || isNaN(numericId)) {
       throw new BadRequestException('Invalid rating ID');

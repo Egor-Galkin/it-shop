@@ -11,7 +11,6 @@ export class TypesService {
     return this.prisma.type.create({ data: createTypeDto });
   }
 
-  // ✅ Возвращаем типы с количеством устройств
   async findAll() {
     const types = await this.prisma.type.findMany({
       include: {
@@ -37,7 +36,6 @@ export class TypesService {
     return this.prisma.type.update({ where: { id }, data: updateTypeDto });
   }
 
-  // ✅ Защита от удаления используемого типа
   async remove(id: number) {
     const deviceCount = await this.prisma.device.count({
       where: { typeId: id }

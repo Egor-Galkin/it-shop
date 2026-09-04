@@ -16,11 +16,11 @@ export class QueryUsersDto {
 
   @IsOptional()
   @IsString()
-  search?: string; // Поиск по email
+  search?: string;
 
   @IsOptional()
   @IsEnum(['CLIENT', 'ADMIN'])
-  role?: string = 'CLIENT'; // Фильтр по роли
+  role?: string = 'CLIENT';
 
   @IsOptional()
   @IsString()

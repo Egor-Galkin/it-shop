@@ -12,7 +12,7 @@ export class QueryDevicesDto {
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  @Max(100) // Ограничиваем максимум 100 товаров за запрос
+  @Max(100)
   limit?: number;
 
   @IsOptional()

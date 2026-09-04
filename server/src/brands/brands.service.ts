@@ -11,7 +11,6 @@ export class BrandsService {
     return this.prisma.brand.create({ data: createBrandDto })
   }
 
-  // ✅ Возвращаем бренды с количеством устройств
   async findAll() {
     const brands = await this.prisma.brand.findMany({
       include: {
@@ -37,7 +36,6 @@ export class BrandsService {
     return this.prisma.brand.update({ where: { id }, data: updateBrandDto });
   }
 
-  // ✅ Защита от удаления используемого бренда
   async remove(id: number) {
     const deviceCount = await this.prisma.device.count({
       where: { brandId: id }

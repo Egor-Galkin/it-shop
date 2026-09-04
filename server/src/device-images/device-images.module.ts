@@ -7,6 +7,6 @@ import { PrismaModule } from '../prisma/prisma.module';
   controllers: [DeviceImagesController],
   providers: [DeviceImagesService],
   imports: [PrismaModule],
-  exports: [DeviceImagesService], // ✅ Экспортируем, если нужно использовать в других сервисах
+  exports: [DeviceImagesService],
 })
 export class DeviceImagesModule {}

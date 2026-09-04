@@ -7,6 +7,6 @@ import { PrismaModule } from '../prisma/prisma.module';
   controllers: [DiscountsController],
   providers: [DiscountsService],
   imports: [PrismaModule],
-  exports: [DiscountsService], // ✅ Экспортируем для использования в DevicesService
+  exports: [DiscountsService],
 })
 export class DiscountsModule {}

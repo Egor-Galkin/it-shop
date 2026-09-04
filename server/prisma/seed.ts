@@ -1,5 +1,3 @@
-// server/prisma/seed.ts
-
 import "dotenv/config";
 import { Pool } from 'pg';
 
@@ -13,7 +11,7 @@ async function main() {
   try {
     const now = new Date().toISOString();
 
-    // === 1. Brands (нет createdAt/updatedAt) ===
+    // Brands
     await pool.query(`
       INSERT INTO "brand" (id, name) VALUES 
       (1, 'Apple'),
@@ -28,7 +26,7 @@ async function main() {
     `);
     console.log('Created brands');
 
-    // === 2. Types (нет createdAt/updatedAt) ===
+    // Types
     await pool.query(`
       INSERT INTO "type" (id, name) VALUES 
       (1, 'Смартфоны'),
@@ -42,7 +40,7 @@ async function main() {
     `);
     console.log('Created types');
 
-    // === 3. Devices (есть createdAt/updatedAt) ===
+    // Devices
     await pool.query(`
       INSERT INTO "device" (
         id, name, price, rating, img, "brandId", "typeId", "createdAt", "updatedAt"
@@ -87,7 +85,7 @@ async function main() {
     `);
     console.log('Created devices');
 
-    // === 4. Device Info (есть createdAt/updatedAt) ===
+    // Device Info
     await pool.query(`
       INSERT INTO "device_info" ("deviceId", title, description, "createdAt", "updatedAt") VALUES 
       (2, 'Процессор', 'Apple A16 Bionic, 6-ядерный', '${now}', '${now}'),
@@ -146,7 +144,7 @@ async function main() {
     `);
     console.log('Created device info');
 
-    // === 5. Device Images (есть createdAt/updatedAt) ===
+    // Device Images
     await pool.query(`
       INSERT INTO "device_image" ("deviceId", img, "createdAt", "updatedAt") VALUES 
       (24, '/uploads/devices/airpodspro2.jpg', '${now}', '${now}'),
@@ -155,7 +153,7 @@ async function main() {
     `);
     console.log('Created device images');
 
-    // === 6. Users (есть createdAt/updatedAt) ===
+    // Users
     await pool.query(`
       INSERT INTO "user" (id, email, password, role, "createdAt", "updatedAt") VALUES 
       (1, 'admin@gmail.com', '$2b$10$xokm9YONzY3zC4EIcyx/0ef5cwz5va5RPQymakb8aWx46qizQeyLe', 'ADMIN', '${now}', '${now}'),
@@ -169,7 +167,7 @@ async function main() {
     `);
     console.log('Created users');
 
-    // === 7. Discounts (есть createdAt/updatedAt) ===
+    // Discounts
     await pool.query(`
       INSERT INTO "discount" (id, "deviceId", value, "dateStart", "dateEnd", "createdAt", "updatedAt") VALUES 
       (1, 24, 50.00, '2026-05-29T21:00:00', '2026-07-25T20:59:59', '${now}', '${now}'),
@@ -179,7 +177,7 @@ async function main() {
     `);
     console.log('Created discounts');
 
-    // === 8. Ratings (ДОБАВЛЕНО updatedAt, так как в БД он есть!) ===
+    // Ratings
     await pool.query(`
       INSERT INTO "rating" (id, "userId", "deviceId", rate, hidden, description, "createdAt", "updatedAt") VALUES 
       (1, 2, 1, 5, false, 'Лучший смартфон! Камера потрясающая, батарея держит весь день.', '${now}', '${now}'),
@@ -204,7 +202,7 @@ async function main() {
     `);
     console.log('Created ratings');
 
-    // === 9. Delivery Options (есть createdAt/updatedAt) ===
+    // Delivery Options
     await pool.query(`
       INSERT INTO "delivery_option" (id, name, type, price, address, description, "isActive", "sortOrder", "createdAt", "updatedAt") VALUES 
       (1, 'Доставка обычная', 'DELIVERY', 100.00, null, 'Срок: 2-3 рабочих дня', true, 1, '${now}', '${now}'),
@@ -216,7 +214,7 @@ async function main() {
     `);
     console.log('Created delivery options');
 
-    // === 10. Baskets (есть createdAt/updatedAt) ===
+    // Baskets
     await pool.query(`
       INSERT INTO "basket" (id, "userId", "paidAt", "deliveredAt", "createdAt", "updatedAt", "deliveryOptionId") VALUES 
       (1, 2, '2026-05-02T15:25:24.991', '2026-06-24T12:23:26.341', '2026-05-03T15:25:24.991', '${now}', 1),
@@ -239,7 +237,7 @@ async function main() {
     `);
     console.log('Created baskets');
 
-    // === 11. Basket Devices (нет createdAt/updatedAt) ===
+    // Basket Devices
     await pool.query(`
       INSERT INTO "basket_device" ("basketId", "deviceId", quantity) VALUES 
       (1, 1, 1),
