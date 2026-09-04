@@ -10,7 +10,6 @@ export function Footer() {
   const pathname = usePathname();
   const year = new Date().getFullYear();
   
-  // ✅ Флаг: компонент смонтирован на клиенте (предотвращает гидратацию)
   const [isHydrated, setIsHydrated] = useState(false);
   
   useEffect(() => {
@@ -19,8 +18,6 @@ export function Footer() {
   
   const isActive = (path: string) => pathname === path;
 
-  // ✅ Определяем href и текст ссылки ТОЛЬКО после гидратации
-  // До этого сервер и клиент видят одинаковый HTML
   const navHref = isHydrated && user ? '/profile' : '/auth';
   const navText = isHydrated && user ? 'Личный кабинет' : 'Войти';
 

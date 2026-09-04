@@ -13,7 +13,6 @@ interface DeviceEditModalProps {
   isLoading: boolean;
 }
 
-// ✅ Вспомогательная функция для очистки характеристик от системных полей
 const cleanSpec = (spec: any) => ({
   title: spec.title || '',
   description: spec.description || ''
@@ -27,7 +26,6 @@ export function DeviceEditModal({ isOpen, onClose, device, types, brands, onSubm
 
   useEffect(() => {
     if (device) {
-      // ✅ Очищаем deviceInfos от системных полей (id, createdAt и т.д.)
       const cleanInfos = device.deviceInfos?.length 
         ? device.deviceInfos.map(cleanSpec) 
         : [{ title: '', description: '' }];
@@ -51,7 +49,6 @@ export function DeviceEditModal({ isOpen, onClose, device, types, brands, onSubm
   const handleChange = (field: string, value: any) => 
     setForm(prev => ({ ...prev, [field]: value }));
   
-  // ✅ CRUD для характеристик
   const handleSpecChange = (index: number, field: 'title' | 'description', value: string) => {
     const newSpecs = [...form.deviceInfos];
     newSpecs[index][field] = value;
@@ -84,7 +81,6 @@ export function DeviceEditModal({ isOpen, onClose, device, types, brands, onSubm
         ) : (
           <form onSubmit={async (e) => {
             e.preventDefault();
-            // ✅ Финальная очистка перед отправкой на бэкенд
             const payload = {
               ...form,
               deviceInfos: form.deviceInfos
@@ -152,7 +148,6 @@ export function DeviceEditModal({ isOpen, onClose, device, types, brands, onSubm
               </div>
             </div>
 
-            {/* Характеристики с полным CRUD */}
             <div className={styles.section}>
               <div className={styles.sectionHeader}>
                 <h4>Характеристики</h4>

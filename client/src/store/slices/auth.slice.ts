@@ -13,7 +13,6 @@ interface AuthState {
   error: string | null;
 }
 
-// ✅ Безопасная инициализация из localStorage
 const getInitialState = (): AuthState => {
   if (typeof window === 'undefined') {
     return { user: null, token: null, isLoading: false, error: null };
@@ -68,13 +67,11 @@ export const authSlice = createSlice({
     setError: (state, action: PayloadAction<string | null>) => { 
       state.error = action.payload; 
     },
-    // ✅ Оставляем initializeAuth для совместимости с ReduxProvider
     initializeAuth: (state) => {
       // Инициализация уже выполнена в getInitialState()
     },
   },
 });
 
-// ✅ Экспортируем все редьюсеры, включая initializeAuth
 export const { setCredentials, logout, setLoading, setError, initializeAuth } = authSlice.actions;
 export default authSlice.reducer;

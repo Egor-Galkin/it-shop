@@ -6,7 +6,6 @@ import styles from './FloatingWidgets.module.scss';
 export function FloatingWidgets() {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
-  // Показывать кнопку "наверх" после прокрутки 300px
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 300);
@@ -22,10 +21,8 @@ export function FloatingWidgets() {
 
   return (
     <div className={styles.widgets}>
-      {/* ✅ Плавающая корзина (показывается только авторизованным) */}
       <FloatingCart />
       
-      {/* ✅ Кнопка "Наверх" */}
       {showScrollTop && (
         <button 
           className={styles.scrollTopBtn}

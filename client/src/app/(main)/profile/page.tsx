@@ -1,5 +1,4 @@
 'use client';
-// ✅ 'use client' — ВСЕГДА первая строка!
 
 if (typeof window === 'undefined') {
   console.log('🔍 [ProfilePage module] SERVER eval');
@@ -54,7 +53,6 @@ export default function ProfilePage() {
     
     if (!hasToken) {
       console.log('🔍 [ProfilePage] ❌ NO TOKEN — redirecting to /auth');
-      // ✅ Полная перезагрузка вместо router.push (обходит Next.js server redirect)
       if (typeof window !== 'undefined') {
         window.location.href = '/auth';
       }

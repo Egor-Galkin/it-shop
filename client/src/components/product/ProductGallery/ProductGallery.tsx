@@ -17,18 +17,15 @@ export function ProductGallery({ mainImage, extraImages = [], alt }: ProductGall
   const imgRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Все изображения в одном массиве для навигации
   const allImages = [mainImage, ...extraImages.map(e => e.img)];
   const currentIndex = allImages.indexOf(selectedImage);
 
-  // ✅ Обработчик ошибки загрузки изображения
   const handleImageError = () => {
     setImageError(true);
     setIsZoomed(false);
     setIsFullscreen(false);
   };
 
-  // ✅ При изменении mainImage сбрасываем выбранное изображение
   useEffect(() => {
     setSelectedImage(mainImage);
     setImageError(false);
@@ -45,7 +42,6 @@ export function ProductGallery({ mainImage, extraImages = [], alt }: ProductGall
     });
   };
 
-  // ✅ Навигация клавишами
   const handleKeyDown = (e: KeyboardEvent) => {
     if (!isFullscreen) return;
     if (e.key === 'Escape') setIsFullscreen(false);
@@ -70,7 +66,6 @@ export function ProductGallery({ mainImage, extraImages = [], alt }: ProductGall
     };
   }, [isFullscreen]);
 
-  // ✅ Переключение изображений
   const goToPrevImage = () => {
     if (currentIndex > 0) {
       setSelectedImage(allImages[currentIndex - 1]);
@@ -85,23 +80,19 @@ export function ProductGallery({ mainImage, extraImages = [], alt }: ProductGall
     }
   };
 
-  // ✅ Заглушка, если нет изображения или ошибка загрузки
   const isPlaceholder = mainImage === '/display.svg' || imageError;
 
   return (
     <>
       <div className={styles.gallery}>
         {isPlaceholder ? (
-          // Заглушка, если нет изображения или ошибка загрузки
           <div className={styles.placeholderWrap}>
             <img src="/display.svg" alt="" className={styles.placeholderIcon} />
             <span className={styles.placeholderText}>Нет изображения</span>
           </div>
         ) : (
           <>
-            {/* ✅ Верх: большое изображение с навигацией */}
             <div className={styles.mainImageContainer}>
-              {/* Кнопка "Назад" */}
               {currentIndex > 0 && (
                 <button 
                   className={`${styles.navBtn} ${styles.prev}`} 
@@ -134,7 +125,6 @@ export function ProductGallery({ mainImage, extraImages = [], alt }: ProductGall
                 <div className={styles.zoomHint}>Нажмите для просмотра</div>
               </div>
               
-              {/* Кнопка "Вперёд" */}
               {currentIndex < allImages.length - 1 && (
                 <button 
                   className={`${styles.navBtn} ${styles.next}`} 
@@ -147,9 +137,7 @@ export function ProductGallery({ mainImage, extraImages = [], alt }: ProductGall
               )}
             </div>
 
-            {/* ✅ Низ: миниатюры (основное слева с серой обводкой, доп. справа со скроллом) */}
             <div className={styles.thumbnailsBar}>
-              {/* Миниатюра основного изображения с серой обводкой */}
               <button
                 className={`${styles.thumb} ${styles.mainThumb} ${selectedImage === mainImage ? styles.thumbActive : ''}`}
                 onClick={() => {
@@ -167,7 +155,6 @@ export function ProductGallery({ mainImage, extraImages = [], alt }: ProductGall
                 <span className={styles.thumbLabel}>Основное</span>
               </button>
 
-              {/* Миниатюры дополнительных изображений со скроллом */}
               {extraImages.length > 0 && (
                 <div className={styles.extraThumbnails}>
                   <div className={styles.extraThumbnailsScroll}>
@@ -197,12 +184,10 @@ export function ProductGallery({ mainImage, extraImages = [], alt }: ProductGall
         )}
       </div>
 
-      {/* ✅ Полноэкранный режим с навигацией */}
       {isFullscreen && !imageError && (
         <div className={styles.fullscreen} onClick={() => setIsFullscreen(false)}>
           <button className={styles.closeBtn} onClick={() => setIsFullscreen(false)} type="button">✕</button>
           
-          {/* Кнопка "Назад" в фуллскрине */}
           {currentIndex > 0 && (
             <button 
               className={`${styles.fullscreenNav} ${styles.prev}`} 
@@ -221,7 +206,6 @@ export function ProductGallery({ mainImage, extraImages = [], alt }: ProductGall
             onError={handleImageError}
           />
           
-          {/* Кнопка "Вперёд" в фуллскрине */}
           {currentIndex < allImages.length - 1 && (
             <button 
               className={`${styles.fullscreenNav} ${styles.next}`} 

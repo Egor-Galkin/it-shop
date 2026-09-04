@@ -342,10 +342,8 @@ export function UsersAdmin() {
                                     
                                     return (
                                       <div key={order.id} className={styles.orderCard}>
-                                        {/* Шапка заказа */}
                                         <div className={styles.orderHeader}>
                                           <span className={styles.orderId}>Заказ №{order.id}</span>
-                                          {/* ✅ Способ получения */}
                                           {order.deliveryOption && (
                                           <span className={styles.deliveryInfo}>
                                             {order.deliveryOption.name}
@@ -366,7 +364,6 @@ export function UsersAdmin() {
                                           </span>
                                         </div>
 
-                                        {/* Таблица товаров */}
                                         <div className={styles.orderTableWrapper}>
                                           <table className={styles.orderTable}>
                                             <thead>
@@ -407,7 +404,6 @@ export function UsersAdmin() {
                                           </table>
                                         </div>
 
-                                        {/* Футер заказа */}
                                         <div className={styles.orderFooter}>
                                           <span className={styles.orderTotal}>Итого: <strong>{order.total.toLocaleString('ru-RU')} ₽</strong></span>
                                           <button 

@@ -7,7 +7,6 @@
   gap: 4rem; 
 }
 
-/* ───────── ОБЩАЯ АНИМАЦИЯ ───────── */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
@@ -18,7 +17,6 @@
   opacity: 0;
 }
 
-/* ───────── ЗАГОЛОВОК СЕКЦИИ ───────── */
 .sectionTitle {
   font-size: 2rem;
   margin-bottom: 2rem;
@@ -41,7 +39,6 @@
   }
 }
 
-/* ───────── ПРЕИМУЩЕСТВА (Flexbox, шахматный порядок) ───────── */
 .advantages {
   padding: 2rem 0;
 }
@@ -54,17 +51,15 @@
 
 .advantageBlock {
   display: flex;
-  flex-direction: row; /* По умолчанию: Текст | Картинка */
+  flex-direction: row;
   gap: 3rem;
   align-items: center;
   padding: 0;
   
-  /* Шахматное чередование: Картинка | Текст */
   &.reverse {
     flex-direction: row-reverse; 
   }
 
-  /* Эффекты при наведении */
   &:hover {
     .advImage { 
       border-color: var(--color-primary); 
@@ -89,7 +84,7 @@
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  flex: 0.95; /* Занимает половину ширины */
+  flex: 0.95;
   
   img {
     width: 100%;
@@ -103,7 +98,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  flex: 1; /* Занимает половину ширины */
+  flex: 1;
 }
 
 .advTitle {
@@ -129,7 +124,6 @@
   margin: 0;
 }
 
-/* ───────── КАТЕГОРИИ ───────── */
 .categories {
   text-align: center;
   padding: 2rem 0;
@@ -182,7 +176,6 @@
   font-size: 1.1rem;
 }
 
-/* ───────── О МАГАЗИНЕ ───────── */
 .info {
   text-align: center; 
   padding: 2.5rem;
@@ -271,7 +264,6 @@
   line-height: 1.5; 
 }
 
-/* ───────── СТАТИСТИКА ───────── */
 .stats {
   background: var(--color-surface);
   border-radius: 1rem;
@@ -304,7 +296,6 @@
   font-size: 0.95rem;
 }
 
-/* ───────── CTA ───────── */
 .cta {
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
   border-radius: 1rem;
@@ -346,7 +337,6 @@
   }
 }
 
-/* ───────── ПАРТНЁРЫ ───────── */
 .partners { 
   text-align: center; 
 }
@@ -396,20 +386,19 @@
   }
 }
 
-/* ───────── АДАПТИВ ───────── */
 @media (max-width: 900px) { 
   .features { grid-template-columns: 1fr 1fr; }
   
   .advantageBlock {
-    flex-direction: column; /* Вертикально на планшетах */
+    flex-direction: column;
     
     &.reverse {
-      flex-direction: column; /* Отменяем row-reverse */
+      flex-direction: column;
     }
   }
   
   .advImage {
-    order: 2; /* Картинка всегда внизу */
+    order: 2;
     width: 100%;
     
     img { max-width: 200px; }

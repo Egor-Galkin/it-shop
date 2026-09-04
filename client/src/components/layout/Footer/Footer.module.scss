@@ -27,7 +27,6 @@
   position: relative;
   padding-bottom: 2px;
   
-  /* Подчёркивание (по умолчанию скрыто) */
   &::after {
     content: '';
     position: absolute;
@@ -40,7 +39,6 @@
     opacity: 0;
   }
   
-  /* При наведении: синий текст, без подчёркивания */
   &:hover {
     color: var(--color-primary);
     
@@ -49,7 +47,6 @@
     }
   }
   
-  /* Активная страница: белый текст + подчёркивание */
   &.active {
     color: #ffffff;
     font-weight: 500;

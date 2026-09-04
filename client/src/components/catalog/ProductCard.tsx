@@ -44,16 +44,13 @@ export default function ProductCard({ device }: ProductCardProps) {
     setCurrentExtraIndex(0);
   };
 
-  // После других useState добавь:
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // После useEffect для слайдера добавь новый:
   useEffect(() => {
     if (showExtraMenu && menuRef.current) {
       const menuRect = menuRef.current.getBoundingClientRect();
       const viewportWidth = window.innerWidth;
       
-      // Если меню уходит за левый край — показываем справа от карточки
       if (menuRect.left < 10) {
         menuRef.current.style.left = 'calc(100% + 10px)';
         menuRef.current.style.right = 'auto';
@@ -109,7 +106,6 @@ export default function ProductCard({ device }: ProductCardProps) {
           </span>
         </div>
 
-        {/* ✅ Цена со скидкой */}
         <div className={styles.priceWrap}>
           {device.discount && device.finalPrice && device.finalPrice < device.price ? (
             <>

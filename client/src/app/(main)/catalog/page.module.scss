@@ -9,7 +9,6 @@
   margin-top: 4rem;
 }
 
-/* ───────── ФИЛЬТРЫ (Glass + Sticky) ───────── */
 .filters {
   display: grid;
   grid-template-columns: 1.5fr 1fr 1fr 1fr;
@@ -45,7 +44,6 @@
   &:focus { outline: none; border-color: var(--color-primary); background: rgba(20, 20, 20, 0.8); }
 }
 
-/* ───────── ПАГИНАЦИЯ (Sticky + Glass + Buttons) ───────── */
 .paginationWrapper {
   position: sticky;
   bottom: 1.5rem;
@@ -78,7 +76,6 @@
   }
 }
 
-/* Кнопки выбора лимита (горизонтальные, как в сортировке отзывов) */
 .limitButtons {
   display: flex;
   gap: 0.3rem;
@@ -138,7 +135,6 @@
   text-align: center; 
 }
 
-/* ───────── СЕТКА ТОВАРОВ ───────── */
 .grid { 
   display: grid; 
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); 
@@ -177,7 +173,6 @@
   grid-column: 1 / -1; 
 }
 
-/* ───────── АДАПТИВ ───────── */
 @media (max-width: 1024px) {
   .filters { grid-template-columns: 1fr 1fr; top: 5rem; }
   .search { grid-column: 1 / -1; }
@@ -200,7 +195,6 @@
   .pageBtn { padding: 0.3rem 0.7rem; font-size: 0.8rem; }
 }
 
-/* ───────── FALLBACK ───────── */
 @supports not (backdrop-filter: blur(10px)) {
   .filters, .paginationWrapper {
     background: rgba(30, 30, 30, 0.95);

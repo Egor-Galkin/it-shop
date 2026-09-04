@@ -13,13 +13,12 @@ export default function AuthPage() {
   const [password, setPassword] = useState('');
   const [touched, setTouched] = useState({ email: false, password: false });
   const [errors, setErrors] = useState({ email: '', password: '' });
-  const [isClient, setIsClient] = useState(false); // ✅ Для предотвращения гидратации
+  const [isClient, setIsClient] = useState(false);
   
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { isLoading, error: authError } = useAppSelector((s) => s.auth);
 
-  // ✅ Инициализируем isClient только на клиенте
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -69,16 +68,13 @@ export default function AuthPage() {
       const endpoint = isLogin ? '/auth/login' : '/auth/register';
       const { data } = await api.post(endpoint, { email, password });
 
-      // ✅ Сохраняем токен и пользователя в localStorage
       if (data.access_token) {
         localStorage.setItem('access_token', data.access_token);
         localStorage.setItem('user', JSON.stringify(data.user));
       }
 
-      // ✅ Обновляем Redux
       dispatch(setCredentials(data));
 
-      // ✅ Полная перезагрузка страницы — гарантирует, что следующий запрос будет с токеном
       window.location.href = '/';
       
     } catch (err: any) {
@@ -90,7 +86,6 @@ export default function AuthPage() {
 
   const hasErrors = Boolean(errors.email || errors.password);
 
-  // ✅ Пока не клиент — рендерим пустой div (предотвращаем гидратацию)
   if (!isClient) {
     return <div className={styles.container} />;
   }

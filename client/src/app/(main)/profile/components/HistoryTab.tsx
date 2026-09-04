@@ -46,7 +46,6 @@ export function HistoryTab() {
     }
   };
 
-  // ✅ Скачивание чека
   const downloadReceipt = async (order: any) => {
     setReceiptLoading(order.id);
     try {
@@ -60,13 +59,11 @@ export function HistoryTab() {
     }
   };
 
-  // ✅ Форматирование типа доставки (без дублирования "Доставка:" / "Самовывоз:")
   const formatDeliveryType = (order: any) => {
     if (!order.deliveryOption) return 'Неизвестно';
     return order.deliveryOption.name;
   };
 
-  // ✅ Статус доставки: • для ожидания, + для завершения (без эмодзи)
   const getDeliveryStatus = (order: any) => {
     if (!order.deliveryOption) return '';
     
@@ -97,11 +94,9 @@ export function HistoryTab() {
             <div key={order.id} className={styles.orderCard}>
               <div className={styles.orderHeader}>
                 <span>Оплачен: <strong>{dateStr} в {timeStr}</strong></span>
-                {/* ✅ Тип доставки без префикса */}
                 <span className={styles.deliveryType}>
                   {formatDeliveryType(order)}
                 </span>
-                {/* ✅ Статус с • или + вместо эмодзи */}
                 {order.deliveryOption && (
                   <span className={styles.deliveryStatus}>
                     {getDeliveryStatus(order)}
@@ -160,7 +155,6 @@ export function HistoryTab() {
               <div className={styles.footer}>
                 <span>Итого: <strong>{orderTotal.toLocaleString('ru-RU')} ₽</strong></span>
                 <div className={styles.orderActions}>
-                  {/* ✅ Кнопка скачивания чека */}
                   <button 
                     onClick={() => downloadReceipt(order)} 
                     disabled={receiptLoading === order.id}
@@ -169,7 +163,6 @@ export function HistoryTab() {
                   >
                     {receiptLoading === order.id ? '...' : 'Чек'}
                   </button>
-                  {/* ✅ Кнопка отмены заказа */}
                   <button 
                     onClick={() => cancelOrder(order.id)} 
                     disabled={cancelLoading === order.id} 

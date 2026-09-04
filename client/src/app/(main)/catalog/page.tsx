@@ -21,13 +21,9 @@ function CatalogContent() {
   
   const [searchInput, setSearchInput] = useState(searchParams.get('search') || '');
 
-  // Загрузка данных
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-
-      // ТЕСТОВАЯ ЗАДЕРЖКА 3 СЕКУНДЫ (убрать позже)
-      //await new Promise(resolve => setTimeout(resolve, 3000));
 
       try {
         const params = Object.fromEntries(searchParams.entries());
@@ -46,7 +42,6 @@ function CatalogContent() {
     fetchData();
   }, [searchParams]);
 
-  // Дебаунс поиска
   useEffect(() => {
     const timer = setTimeout(() => {
       const currentSearch = searchParams.get('search') || '';
@@ -58,7 +53,6 @@ function CatalogContent() {
   const updateFilter = (key: string, val: string) => {
     const p = new URLSearchParams(searchParams.toString());
 
-    // Сохраняем текущее состояние для сравнения
     const currentParams = searchParams.toString();
 
     if (key === 'orderBy') {
@@ -74,7 +68,7 @@ function CatalogContent() {
       p.set('page', val);
     } else if (key === 'limit') {
       p.set('limit', val);
-      p.set('page', '1'); // Сброс на первую страницу при смене лимита
+      p.set('page', '1');
     } else if (!val) {
       p.delete(key); p.set('page', '1');
     } else {
@@ -96,7 +90,6 @@ function CatalogContent() {
     return orderBy;
   })();
 
-  // Пагинация с кнопками лимита (как в сортировке отзывов)
   const PaginationBlock = () => {
     if (meta.totalPages <= 1 && meta.total === 0) return null;
     const currentLimit = searchParams.get('limit') || '12';

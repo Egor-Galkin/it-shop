@@ -71,7 +71,6 @@ export function ProductInfo({ device }: ProductInfoProps) {
           </span>
         )}
       </div>
-
       
     </div>
   );

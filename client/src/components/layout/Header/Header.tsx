@@ -14,13 +14,11 @@ export function Header() {
   const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
   
-  // ✅ Флаг: компонент смонтирован на клиенте (предотвращает гидратацию)
   const [isHydrated, setIsHydrated] = useState(false);
   
   const [isEmailPinned, setIsEmailPinned] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  // ✅ Устанавливаем isHydrated после монтирования
   useEffect(() => {
     setIsHydrated(true);
   }, []);
@@ -66,7 +64,6 @@ export function Header() {
 
   const isActive = (path: string) => pathname === path;
 
-  // ✅ Показывать email, если: зафиксирован ИЛИ наведение (и не мобильный)
   const showEmail = isEmailPinned || (isHovered && typeof window !== 'undefined' && window.innerWidth > 768);
 
   return (
@@ -99,8 +96,6 @@ export function Header() {
               Каталог
             </Link>
             
-            {/* ✅ Рендерим ссылку "Профиль" ТОЛЬКО после гидратации */}
-            {/* Это предотвращает mismatch: сервер и клиент видят одинаковый HTML до isHydrated */}
             {isHydrated && user && (
               <Link 
                 href="/profile" 
@@ -113,7 +108,6 @@ export function Header() {
         </div>
         
         <div className={styles.right}>
-          {/* ✅ Рендерим авторизованный блок ТОЛЬКО после гидратации */}
           {isHydrated && user ? (
             <>
               <div 

@@ -36,7 +36,6 @@ export function ModalForm({
   const modalRef = useRef<HTMLDivElement>(null);
   const [formValues, setFormValues] = useState<Record<string, any>>(initialValues || {});
   
-  // Закрытие по клику вне модального окна
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
@@ -55,7 +54,6 @@ export function ModalForm({
     };
   }, [isOpen, onClose]);
 
-  // Закрытие по Escape
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -68,7 +66,6 @@ export function ModalForm({
     return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen, onClose]);
 
-  // Сброс формы при открытии
   useEffect(() => {
     if (isOpen) {
       setFormValues(initialValues || {});

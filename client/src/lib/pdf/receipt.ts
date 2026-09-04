@@ -2,10 +2,8 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 export async function generateReceiptPDF(order: any): Promise<void> {
-  // ✅ Создаём простой HTML-шаблон чека (без React-компонентов)
   const receiptHTML = buildReceiptHTML(order);
   
-  // ✅ Создаём контейнер с правильными стилями для html2canvas
   const container = document.createElement('div');
   container.innerHTML = receiptHTML;
   container.style.cssText = `
@@ -27,10 +25,8 @@ export async function generateReceiptPDF(order: any): Promise<void> {
   document.body.appendChild(container);
   
   try {
-    // ✅ Ждём, пока браузер отрендерит контент
     await new Promise(resolve => setTimeout(resolve, 200));
     
-    // ✅ Конвертируем в canvas
     const canvas = await html2canvas(container, {
       scale: 2,
       useCORS: true,
@@ -41,12 +37,10 @@ export async function generateReceiptPDF(order: any): Promise<void> {
       foreignObjectRendering: true
     });
     
-    // ✅ Проверяем, что canvas не пустой
     if (canvas.width === 0 || canvas.height === 0) {
       throw new Error('Canvas is empty');
     }
     
-    // ✅ Создаём PDF
     const imgData = canvas.toDataURL('image/png');
     const pdf = new jsPDF({
       orientation: 'portrait',
@@ -61,12 +55,10 @@ export async function generateReceiptPDF(order: any): Promise<void> {
     pdf.save(`receipt_${order.id}.pdf`);
     
   } finally {
-    // ✅ Очищаем контейнер
     container.remove();
   }
 }
 
-// ✅ Вспомогательная функция для генерации HTML чека
 function buildReceiptHTML(order: any): string {
   const orderDate = new Date(order.paidAt);
   const formattedDate = orderDate.toLocaleDateString('ru-RU', {

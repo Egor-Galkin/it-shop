@@ -79,7 +79,6 @@ export function OrdersAdmin() {
       const { data } = await api.get('/basket/admin/orders', { params });
       let ordersData = data.data || [];
       
-      // ✅ Клиентская сортировка для полей, которые нельзя сортировать в Prisma напрямую
       if (!serverSortableFields.includes(sortField) && sortOrder) {
         const multiplier = sortOrder === 'asc' ? 1 : -1;
         ordersData = [...ordersData].sort((a: Order, b: Order) => {
@@ -126,7 +125,7 @@ export function OrdersAdmin() {
       await api.patch(`/basket/${orderId}/deliver`, {
         deliveredAt: currentDeliveredAt ? null : new Date().toISOString()
       });
-      await loadData(); // Перезагружаем список для актуализации сортировки/фильтров
+      await loadData();
       dispatch(toast.success(currentDeliveredAt ? 'Доставка отменена' : 'Заказ выдан/доставлен'));
     } catch (e: any) {
       dispatch(toast.error(e.response?.data?.message || 'Ошибка обновления статуса'));
@@ -162,7 +161,6 @@ export function OrdersAdmin() {
         <h1>Управление заказами</h1>
       </div>
 
-      {/* ✅ Фильтры и поиск */}
       <div className={styles.filters}>
         <input placeholder="Поиск по email покупателя..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className={styles.search} />
         <CustomSelect 
@@ -176,7 +174,6 @@ export function OrdersAdmin() {
         />
       </div>
 
-      {/* ✅ Таблица заказов */}
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>

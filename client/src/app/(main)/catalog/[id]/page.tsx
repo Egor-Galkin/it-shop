@@ -67,16 +67,14 @@ function ProductContent() {
     if (!isNaN(deviceId)) fetchData();
   }, [deviceId]);
 
-  // ✅ Добавляем useCallback для стабилизации функции
   const handleCartClick = useCallback(async (quantity: number, unitPrice: number) => {
     if (!checkAuth()) return;
     try {
-      // ✅ Dispatch с правильными параметрами
       await dispatch(addToCart({ deviceId, quantity, price: unitPrice })).unwrap();
     } catch (err: any) {
       dispatch(toast.error(err.message || 'Ошибка добавления в корзину'));
     }
-  }, [dispatch, deviceId, checkAuth]); // ✅ Зависимости: только то, что реально используется
+  }, [dispatch, deviceId, checkAuth]);
 
   const handleDataUpdate = async () => {
     try {
@@ -160,7 +158,6 @@ function ProductContent() {
         }}
         onSave={(updatedDevice) => {
           setDevice(updatedDevice);
-          // При необходимости обновить deviceInfo/deviceImages
           setDeviceInfo(updatedDevice.deviceInfos || []);
         }}
       />

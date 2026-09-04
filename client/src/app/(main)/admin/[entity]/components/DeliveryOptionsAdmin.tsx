@@ -19,7 +19,6 @@ interface DeliveryOption {
   _count?: { baskets: number };
 }
 
-// ✅ Добавили 'sortOrder' в допустимые поля сортировки
 type SortField = 'id' | 'name' | 'type' | 'isActive' | 'orders' | 'sortOrder';
 type SortOrder = 'asc' | 'desc' | null;
 
@@ -29,7 +28,7 @@ export function DeliveryOptionsAdmin() {
   const [options, setOptions] = useState<DeliveryOption[]>([]);
   const [loading, setLoading] = useState(true);
   
-  const [sortField, setSortField] = useState<SortField>('sortOrder'); // ✅ Теперь ошибка исчезнет
+  const [sortField, setSortField] = useState<SortField>('sortOrder');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -201,13 +200,11 @@ export function DeliveryOptionsAdmin() {
                     </td>
                   </tr>
 
-                  {/* ✅ Раскрывающаяся панель с деталями */}
                   {isExpanded && (
                     <tr className={styles.expandRow}>
                       <td colSpan={7}>
                         <div className={styles.expandContent}>
                           <div className={styles.detailsGrid}>
-                            {/* Цена / Адрес */}
                             <div className={styles.detailItem}>
                               <strong>{option.type === 'DELIVERY' ? 'Цена доставки:' : 'Адрес самовывоза:'}</strong>
                               <span>
@@ -217,13 +214,11 @@ export function DeliveryOptionsAdmin() {
                               </span>
                             </div>
                             
-                            {/* Описание */}
                             <div className={styles.detailItem}>
                               <strong>Описание:</strong>
                               <span>{option.description || '—'}</span>
                             </div>
                             
-                            {/* sortOrder */}
                             <div className={styles.detailItem}>
                               <strong>Порядок сортировки:</strong>
                               <span>{option.sortOrder}</span>
@@ -240,7 +235,6 @@ export function DeliveryOptionsAdmin() {
         </table>
       </div>
 
-      {/* ✅ Модальное окно редактирования */}
       {modalOpen && (
         <DeliveryOptionEditModal
           isOpen={modalOpen}
@@ -251,7 +245,6 @@ export function DeliveryOptionsAdmin() {
         />
       )}
 
-      {/* ✅ Подтверждение удаления */}
       {confirmOpen && optionToDelete && (
         <div className={styles.confirmOverlay}>
           <div className={styles.confirmContent}>

@@ -8,7 +8,6 @@ import { ReviewsAdmin } from './components/ReviewsAdmin';
 import { DeliveryOptionsAdmin } from './components/DeliveryOptionsAdmin';
 import styles from './page.module.scss';
 
-// ✅ Конфигурация вкладок
 const ENTITIES = {
   types: { title: 'Типы товаров' },
   brands: { title: 'Бренды' },
@@ -27,7 +26,6 @@ export default function AdminEntityPage() {
   
   const entity = params.entity as EntityKey;
   
-  // Защита от несуществующих сущностей
   if (!ENTITIES[entity]) {
     router.push('/404');
     return null;
@@ -35,14 +33,12 @@ export default function AdminEntityPage() {
 
   return (
     <div className={styles.adminPage}>
-      {/* ✅ Панель переключения */}
       <div className={styles.entityTabs}>
         {(Object.keys(ENTITIES) as EntityKey[]).map(key => (
           <button
             key={key}
             className={`${styles.tab} ${entity === key ? styles.active : ''}`}
             onClick={() => {
-              // Переход только если вкладка другая
               if (entity !== key) router.push(`/admin/${key}`);
             }}
           >
@@ -51,7 +47,6 @@ export default function AdminEntityPage() {
         ))}
       </div>
 
-      {/* ✅ Рендеринг нужного компонента */}
       <div className={styles.adminContent}>
         {entity === 'types' && <TypesBrandsAdmin entity="types" />}
         {entity === 'brands' && <TypesBrandsAdmin entity="brands" />}

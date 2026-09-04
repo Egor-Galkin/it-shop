@@ -46,12 +46,10 @@ export function DevicesAdmin() {
   const [brands, setBrands] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   
-  // ✅ Пагинация и фильтры
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10); // ✅ По умолчанию 10
+  const [limit, setLimit] = useState(10);
   const [total, setTotal] = useState(0);
   
-  // ✅ Поиск с дебаунсом
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
 
@@ -71,7 +69,6 @@ export function DevicesAdmin() {
   const [reviews, setReviews] = useState<Record<number, Review[]>>({});
   const [reviewsLoading, setReviewsLoading] = useState(false);
 
-  // ✅ Загрузка справочников
   useEffect(() => {
     const loadRefs = async () => {
       try {
@@ -83,7 +80,6 @@ export function DevicesAdmin() {
     loadRefs();
   }, []);
 
-  // ✅ Дебаунс поиска (500ms)
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchQuery);
@@ -92,7 +88,6 @@ export function DevicesAdmin() {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  // ✅ Загрузка устройств с параметрами
   useEffect(() => {
     loadData();
   }, [page, limit, debouncedSearch, filterTypeId, filterBrandId, sortField, sortOrder]);
@@ -115,7 +110,6 @@ export function DevicesAdmin() {
       const { data } = await api.get('/devices', { params });
       let devicesData = data.data || data;
       
-      // ✅ Загружаем активные скидки для каждого товара
       const now = new Date();
       const enrichedDevices = await Promise.all(
         devicesData.map(async (device: Device) => {
@@ -129,7 +123,6 @@ export function DevicesAdmin() {
         })
       );
       
-      // ✅ Клиентская сортировка для id, ratings, basketItems
       if (!serverSortableFields.includes(sortField) && sortOrder) {
         const multiplier = sortOrder === 'asc' ? 1 : -1;
         const sorted = [...enrichedDevices].sort((a: Device, b: Device) => {
@@ -173,7 +166,6 @@ export function DevicesAdmin() {
     return sortOrder === 'asc' ? '▲' : '▼';
   };
 
-  // ✅ Расчёт активной скидки для товара
   const getActiveDiscount = (device: Device) => {
     if (!device.discounts?.length) return null;
     
@@ -240,7 +232,6 @@ export function DevicesAdmin() {
     }
   };
 
-  // ✅ Проверка: можно ли удалить товар
   const canDeleteDevice = (device: Device) => {
     const hasReviews = device._count?.ratings && device._count.ratings > 0;
     const hasOrders = device._count?.basketItems && device._count.basketItems > 0;
@@ -285,7 +276,6 @@ export function DevicesAdmin() {
     return '•'.repeat(value) + '·'.repeat(5 - value);
   };
 
-  // ✅ Пагинация с кнопками лимита (10/20/40)
   const totalPages = Math.ceil(total / limit);
   const PaginationBlock = () => {
     if (totalPages <= 1 && total === 0) return null;
@@ -344,7 +334,6 @@ export function DevicesAdmin() {
         </button>
       </div>
 
-      {/* ✅ Фильтры и поиск */}
       <div className={styles.filters}>
         <input 
           placeholder="Поиск по названию..." 
@@ -364,7 +353,6 @@ export function DevicesAdmin() {
         />
       </div>
 
-      {/* ✅ Таблица товаров */}
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>
@@ -412,7 +400,6 @@ export function DevicesAdmin() {
                       </div>
                     </td>
                     
-                    {/* ✅ Ячейка цены со скидкой */}
                     <td className={styles.priceCell}>
                       {discount ? (
                         <div className={styles.priceWithDiscount}>
@@ -447,7 +434,6 @@ export function DevicesAdmin() {
                     </td>
                   </tr>
 
-                  {/* ✅ Раскрывающаяся панель с вкладками */}
                   {expandedId === device.id && (
                     <tr className={styles.expandRow}>
                       <td colSpan={8}>
@@ -483,9 +469,7 @@ export function DevicesAdmin() {
                             </button>
                           </div>
 
-                          {/* Контент вкладок */}
                           <div className={styles.tabContent}>
-                            {/* ✅ Вкладка: Характеристики */}
                             {activeTab === 'specs' && (
                               <div className={styles.specsGrid}>
                                 <div className={styles.specsSection}>
@@ -543,7 +527,6 @@ export function DevicesAdmin() {
                               </div>
                             )}
 
-                            {/* ✅ Вкладка: Скидки */}
                             {activeTab === 'discounts' && (
                               <div className={styles.discountsSection}>
                                 {device.discounts?.length ? (
@@ -581,7 +564,6 @@ export function DevicesAdmin() {
                               </div>
                             )}
 
-                            {/* ✅ Вкладка: Отзывы */}
                             {activeTab === 'reviews' && (
                               <div className={styles.reviewsSection}>
                                 {reviewsLoading ? (
@@ -628,10 +610,8 @@ export function DevicesAdmin() {
         </table>
       </div>
 
-      {/* ✅ Sticky-пагинация */}
       <PaginationBlock />
 
-      {/* ✅ Модальное окно — ProductEditModal */}
       {modalOpen && (
         <ProductEditModal
           isOpen={modalOpen}
@@ -641,7 +621,6 @@ export function DevicesAdmin() {
         />
       )}
 
-      {/* ✅ Подтверждение удаления */}
       {confirmOpen && deviceToDelete && (
         <div className={styles.confirmOverlay}>
           <div className={styles.confirmContent}>

@@ -28,7 +28,6 @@
   margin-bottom: 0.4rem;
 }
 
-/* ✅ Обёртка для цены со скидкой */
 .priceWrap {
   display: flex;
   align-items: center;
@@ -37,7 +36,6 @@
   flex-wrap: wrap;
 }
 
-/* ✅ Оригинальная цена (зачёркнутая) */
 .originalPrice {
   color: var(--color-text-muted);
   font-size: 1.2rem;
@@ -45,7 +43,6 @@
   font-weight: 400;
 }
 
-/* ✅ Цена со скидкой */
 .discountedPrice {
   font-size: 2rem;
   font-weight: 800;
@@ -53,7 +50,6 @@
   line-height: 1;
 }
 
-/* ✅ Бейдж скидки */
 .discountBadge {
   background: var(--color-primary);
   color: white;
@@ -70,19 +66,16 @@
   50% { opacity: 0.85; }
 }
 
-/* ✅ Старый стиль .price — скрываем, если есть скидка */
 .price {
   font-size: 1.6rem;
   font-weight: 800;
   margin: 0.5rem 0 0;
 }
 
-/* Если используется priceWrap с дисконтом — скрываем старую .price */
 .priceWrap:has(.discountedPrice) + .price {
   display: none;
 }
 
-/* Адаптив */
 @media (max-width: 600px) {
   .discountedPrice {
     font-size: 1.6rem;

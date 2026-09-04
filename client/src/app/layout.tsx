@@ -25,7 +25,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <ConfirmProvider>
             <Toast />
             <BackgroundPattern />
-            {/* ✅ Здесь нет Header и Footer. Они появятся только внутри (main) */}
             {children}
           </ConfirmProvider>
         </ReduxProvider>

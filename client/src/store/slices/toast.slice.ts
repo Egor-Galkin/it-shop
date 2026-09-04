@@ -37,7 +37,6 @@ export const toastSlice = createSlice({
 export const { addToast, removeToast, clearToasts } = toastSlice.actions;
 export default toastSlice.reducer;
 
-// Хелперы для удобного вызова
 export const toast = {
   success: (message: string, duration = 4000) => 
     ({ type: 'toast/addToast', payload: { type: 'success', message, duration } } as const),

@@ -18,13 +18,12 @@ export interface CartItem {
   lockedPrice: number;
 }
 
-// ✅ Добавили deliveryOptionId в состояние корзины
 export interface CartState {
   items: CartItem[];
   loading: boolean;
   error: string | null;
   lastAction: 'added' | 'updated' | 'removed' | 'checked-out' | null;
-  deliveryOptionId: number | null; // ✅ ID выбранного способа получения
+  deliveryOptionId: number | null;
 }
 
 const initialState: CartState = {
@@ -32,20 +31,18 @@ const initialState: CartState = {
   loading: false,
   error: null,
   lastAction: null,
-  deliveryOptionId: null, // ✅ По умолчанию не выбрано
+  deliveryOptionId: null,
 };
 
 export const fetchCart = createAsyncThunk('cart/fetch', async (_, { rejectWithValue }) => {
   try {
     const { data } = await api.get('/basket/me');
     
-    // Маппим items с calculatedPrice
     const items = (data.devices || []).map((item: any) => ({
       ...item,
       lockedPrice: item.calculatedPrice !== undefined ? item.calculatedPrice : item.device.price
     }));
     
-    // ✅ Возвращаем и items, и deliveryOptionId
     return {
       items,
       deliveryOptionId: data.deliveryOptionId ?? null
@@ -107,10 +104,8 @@ export const cartSlice = createSlice({
     clearCart: (state) => { 
       state.items = []; 
       state.lastAction = null;
-      // ✅ Не сбрасываем deliveryOptionId — он может пригодиться для нового заказа
     },
     clearError: (state) => { state.error = null; },
-    // ✅ Экшен для обновления способа доставки
     setDeliveryOptionId: (state, action: PayloadAction<number | null>) => {
       state.deliveryOptionId = action.payload;
     },
@@ -121,7 +116,6 @@ export const cartSlice = createSlice({
       .addCase(fetchCart.fulfilled, (state, action) => {
         state.loading = false;
         state.items = action.payload.items;
-        // ✅ Сохраняем deliveryOptionId из ответа API
         state.deliveryOptionId = action.payload.deliveryOptionId;
       })
       .addCase(fetchCart.rejected, (state, action) => {
@@ -168,11 +162,9 @@ export const cartSlice = createSlice({
 
 export const { clearCart, clearError, setDeliveryOptionId } = cartSlice.actions;
 
-// ✅ Селектор для итоговой суммы товаров (без доставки)
 export const selectCartTotal = (state: RootState) => 
   state.cart.items.reduce((sum: number, item: CartItem) => sum + item.lockedPrice * item.quantity, 0);
 
-// ✅ Селектор для ID выбранного способа доставки
 export const selectCartDeliveryOptionId = (state: RootState) => 
   state.cart.deliveryOptionId;
 

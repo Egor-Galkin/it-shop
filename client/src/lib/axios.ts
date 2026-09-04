@@ -5,7 +5,6 @@ export const api = axios.create({
   timeout: 10000,
 });
 
-// ✅ ЛОГИ: Request interceptor
 api.interceptors.request.use((config) => {
   if (typeof window !== 'undefined') {
     try {
@@ -31,7 +30,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// ✅ ЛОГИ: Response interceptor
 api.interceptors.response.use(
   (res) => {
     console.log(`🔍 [Axios] ${res.config.method?.toUpperCase()} ${res.config.url} → ${res.status}`);

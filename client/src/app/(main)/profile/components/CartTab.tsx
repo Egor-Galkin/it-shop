@@ -41,7 +41,6 @@ export function CartTab() {
 
   const total = useAppSelector(selectCartTotal);
 
-  // Загрузка вариантов доставки
   useEffect(() => {
     const fetchDeliveryOptions = async () => {
       try {
@@ -54,7 +53,6 @@ export function CartTab() {
     fetchDeliveryOptions();
   }, []);
 
-  // Расчёт итога: товары + доставка
   const cartTotal = (() => {
     const itemsTotal = total;
     const selected = deliveryOptions.find(o => o.id === cartDeliveryOptionId);
@@ -64,7 +62,6 @@ export function CartTab() {
     return itemsTotal + deliveryCost;
   })();
 
-  // Обработчик выбора доставки
   const handleSelectDelivery = async (optionId: number | null) => {
     setDeliveryLoading(true);
     
@@ -79,7 +76,6 @@ export function CartTab() {
     }
   };
 
-  // ✅ Валидация: можно ли оформить заказ
   const canCheckout = cartItems.length > 0 && cartDeliveryOptionId !== null && !checkoutLoading;
 
   const changeQty = async (id: number, q: number) => {
@@ -107,7 +103,6 @@ export function CartTab() {
   };
 
   const checkout = async () => {
-    // ✅ Проверка: выбран ли способ получения
     if (!cartDeliveryOptionId) {
       toast.error('Выберите способ получения заказа');
       return;
@@ -134,9 +129,8 @@ export function CartTab() {
   if (cartError) return <p className={styles.error}>{cartError}</p>;
   if (cartItems.length === 0) return <p className={styles.empty}>Корзина пуста</p>;
 
-  // ✅ Формируем опции для CustomSelect (все value — строки, без лишних полей)
   const deliverySelectOptions = [
-    { value: '', label: 'Выберите способ получения' }, // ✅ Убрали disabled: true
+    { value: '', label: 'Выберите способ получения' },
     ...deliveryOptions.map(option => ({
       value: String(option.id),
       label: `${option.name}${option.price ? ` — ${Number(option.price).toLocaleString('ru-RU')} ₽` : ' — бесплатно'}`
@@ -215,17 +209,13 @@ export function CartTab() {
         })}
       </div>
       
-      {/* ✅ Новый футер: слева итог, справа выбор доставки + кнопка */}
       <div className={styles.footer}>
-        {/* Левая часть: итог */}
         <span className={styles.totalLabel}>
           Итого: <strong>{cartTotal.toLocaleString('ru-RU')} ₽</strong>
         </span>
         
-        {/* Правая часть: выбор доставки + кнопка */}
         <div className={styles.footerActions}>
           <div className={styles.deliverySelectWrapper}>
-            {/* ✅ Обёртка для имитации disabled через CSS */}
             <div 
               className={`${styles.deliverySelectContainer} ${(deliveryLoading || checkoutLoading) ? styles.disabled : ''}`}
               style={{
@@ -239,7 +229,6 @@ export function CartTab() {
                 value={cartDeliveryOptionId?.toString() || ''}
                 onChange={(value) => handleSelectDelivery(value ? Number(value) : null)}
                 placeholder="Выберите способ получения"
-                // ✅ Убрали проп disabled, так как компонент его не поддерживает
                 className={styles.deliveryCustomSelect}
               />
             </div>

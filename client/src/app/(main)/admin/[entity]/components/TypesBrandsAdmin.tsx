@@ -199,7 +199,6 @@ export function TypesBrandsAdmin({ entity }: TypesBrandsAdminProps) {
         {sortedItems.length === 0 && <p className={styles.empty}>Записи не найдены.</p>}
       </div>
 
-      {/* Модальное окно формы */}
       <ModalForm
         isOpen={modalOpen}
         onClose={handleCloseModal}
@@ -211,7 +210,6 @@ export function TypesBrandsAdmin({ entity }: TypesBrandsAdminProps) {
         submitLabel={editingItem ? 'Обновить' : 'Добавить'}
       />
 
-      {/* Модальное окно подтверждения */}
       {confirmOpen && itemToDelete && (
         <div className={styles.confirmOverlay}>
           <div className={styles.confirmContent}>

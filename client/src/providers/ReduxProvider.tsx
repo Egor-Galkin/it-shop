@@ -19,7 +19,6 @@ export function ReduxProvider({ children }: { children: React.ReactNode }) {
     
     store.dispatch(initializeAuth()); 
     
-    // Лог после инициализации
     setTimeout(() => {
       const state = store.getState().auth;
       console.log('🔍 [ReduxProvider] After initializeAuth:', { 

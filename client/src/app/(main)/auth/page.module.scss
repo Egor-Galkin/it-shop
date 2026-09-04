@@ -84,7 +84,6 @@
   }
 }
 
-/* Интеграция FormField */
 :global(.field) {
   margin-bottom: 0;
 }
@@ -137,7 +136,6 @@
   }
 }
 
-/* Адаптив */
 @media (max-width: 480px) {
   .card {
     padding: 1.75rem;

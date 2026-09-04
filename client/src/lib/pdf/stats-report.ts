@@ -53,21 +53,19 @@ export async function generateStatsReportPDF(data: StatsReportData): Promise<voi
     
     const imgData = canvas.toDataURL('image/png');
     
-    // A4 формат
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
       format: 'a4'
     });
     
-    const pdfWidth = 210; // A4 ширина в мм
-    const pdfHeight = 297; // A4 высота в мм
+    const pdfWidth = 210;
+    const pdfHeight = 297;
     const margin = 10;
     const contentWidth = pdfWidth - margin * 2;
     
     const imgHeight = (canvas.height * contentWidth) / canvas.width;
     
-    // Если отчёт длиннее одной страницы — разбиваем на части
     let position = margin;
     let remainingHeight = imgHeight;
     let page = 0;
@@ -83,7 +81,6 @@ export async function generateStatsReportPDF(data: StatsReportData): Promise<voi
         canvas.height - sourceY
       );
       
-      // Создаём canvas для текущей страницы
       const pageCanvas = document.createElement('canvas');
       pageCanvas.width = canvas.width;
       pageCanvas.height = sliceHeight;
@@ -98,7 +95,6 @@ export async function generateStatsReportPDF(data: StatsReportData): Promise<voi
       remainingHeight -= (pdfHeight - margin * 2);
       page++;
       
-      // Защита от бесконечного цикла
       if (page > 20) break;
     }
     
@@ -129,7 +125,6 @@ function buildReportHTML(data: StatsReportData): string {
     'by-delivery': 'По доставкам'
   };
   
-  // Максимальное значение для нормализации баров
   const maxDistValue = Math.max(...distributionData.map(d => d.value), 1);
   const maxTimeValue = Math.max(...timelineData.map(d => d.value), 1);
   
@@ -150,7 +145,6 @@ function buildReportHTML(data: StatsReportData): string {
     `;
   }).join('');
   
-  // Для таймлайна показываем только последние 30 точек (чтобы не растягивать)
   const timelineToShow = timelineData.slice(-30);
   const timeRows = timelineToShow.map(item => {
     const percent = (item.value / maxTimeValue) * 100;

@@ -16,7 +16,6 @@ import {
 import { Bar, Pie, Line } from 'react-chartjs-2';
 import styles from './StatsChart.module.scss';
 
-// Регистрация модулей Chart.js
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -41,17 +40,15 @@ interface StatsChartProps {
   title?: string;
 }
 
-// Цветовая палитра
 const BAR_COLORS = ['#3b82f6', '#60a5fa', '#93c5fd', '#dbeafe', '#1e40af', '#1e3a8a', '#f8fafc', '#0f172a'];
 const PIE_COLORS = ['#3b82f6', '#60a5fa', '#93c5fd', '#dbeafe', '#1e40af', '#1e3a8a', '#f8fafc', '#0f172a'];
 const LINE_COLOR = '#60a5fa';
 
-// ───────── ОПЦИИ ДЛЯ ЛЕГЕНДЫ (только для pie) ─────────
 const pieLegendConfig = {
   position: 'right' as const,
-  onClick: () => {}, // Отключаем клик
+  onClick: () => {},
   labels: {
-    color: '#a1a1aa', // Серый цвет текста
+    color: '#a1a1aa',
     font: { 
       size: 12, 
       family: 'system-ui',
@@ -63,12 +60,11 @@ const pieLegendConfig = {
   },
 };
 
-// ───────── ОПЦИИ ДЛЯ BAR (без легенды) ─────────
 const barOptions: ChartOptions<'bar'> = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
-    legend: { display: false }, // ✅ Убираем легенду полностью
+    legend: { display: false },
     tooltip: {
       backgroundColor: 'rgba(15, 23, 42, 0.95)',
       titleColor: '#fff',
@@ -100,12 +96,11 @@ const barOptions: ChartOptions<'bar'> = {
   },
 };
 
-// ───────── ОПЦИИ ДЛЯ PIE (с легендой) ─────────
 const pieOptions: ChartOptions<'pie'> = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
-    legend: pieLegendConfig, // ✅ Оставляем легенду для круговой
+    legend: pieLegendConfig,
     tooltip: {
       backgroundColor: 'rgba(15, 23, 42, 0.95)',
       titleColor: '#fff',
@@ -126,7 +121,6 @@ const pieOptions: ChartOptions<'pie'> = {
   },
 };
 
-// ───────── ОПЦИИ ДЛЯ LINE (без легенды) ─────────
 const lineOptions: ChartOptions<'line'> = {
   responsive: true,
   maintainAspectRatio: false,

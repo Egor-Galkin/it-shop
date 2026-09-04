@@ -47,7 +47,6 @@ export function DeliveryOptionEditModal({ isOpen, onClose, option, existingOptio
         sortOrder: option.sortOrder,
       });
     } else {
-      // Авто-расчёт следующего sortOrder
       const maxSort = Math.max(0, ...existingOptions.map(o => o.sortOrder));
       setForm({
         name: '',
@@ -76,13 +75,11 @@ export function DeliveryOptionEditModal({ isOpen, onClose, option, existingOptio
     setForm(prev => {
       const updated = { ...prev, [field]: value };
       
-      // ✅ При смене типа: очищаем ненужные поля
       if (field === 'type') {
         if (value === 'DELIVERY') updated.address = null;
         if (value === 'PICKUP') updated.price = null;
       }
       
-      // ✅ Валидация sortOrder
       if (field === 'sortOrder') {
         const numValue = Number(value);
         const isDuplicate = existingOptions.some(o => o.sortOrder === numValue && o.id !== form.id);
@@ -96,7 +93,6 @@ export function DeliveryOptionEditModal({ isOpen, onClose, option, existingOptio
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Валидация
     if (!form.name.trim()) {
       alert('Введите название');
       return;
@@ -136,7 +132,6 @@ export function DeliveryOptionEditModal({ isOpen, onClose, option, existingOptio
         </div>
 
         <form onSubmit={handleSubmit} className={styles.modalBody}>
-          {/* Название */}
           <div className={styles.formGroup}>
             <label>Название *</label>
             <input 
@@ -148,7 +143,6 @@ export function DeliveryOptionEditModal({ isOpen, onClose, option, existingOptio
             />
           </div>
 
-          {/* Тип: Доставка / Самовывоз */}
           <div className={styles.formGroup}>
             <label>Тип получения *</label>
             <div className={styles.radioGroup}>
@@ -175,7 +169,6 @@ export function DeliveryOptionEditModal({ isOpen, onClose, option, existingOptio
             </div>
           </div>
 
-          {/* Условные поля */}
           {form.type === 'DELIVERY' ? (
             <div className={styles.formGroup}>
               <label>Цена доставки (₽) *</label>
@@ -202,7 +195,6 @@ export function DeliveryOptionEditModal({ isOpen, onClose, option, existingOptio
             </div>
           )}
 
-          {/* Описание */}
           <div className={styles.formGroup}>
             <label>Описание</label>
             <textarea 
@@ -213,7 +205,6 @@ export function DeliveryOptionEditModal({ isOpen, onClose, option, existingOptio
             />
           </div>
 
-          {/* Активность */}
           <div className={styles.formGroup}>
             <label className={styles.checkboxLabel}>
               <input 
@@ -225,7 +216,6 @@ export function DeliveryOptionEditModal({ isOpen, onClose, option, existingOptio
             </label>
           </div>
 
-          {/* sortOrder */}
           <div className={styles.formGroup}>
             <label>Порядок сортировки *</label>
             <input 

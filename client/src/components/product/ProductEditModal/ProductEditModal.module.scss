@@ -80,7 +80,6 @@
 }
 .formRow { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
 
-/* ✅ Фиксированный размер превью */
 .imagePreview {
   width: 180px; height: 180px; background: #111; border-radius: 0.5rem;
   display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid var(--color-border);
@@ -125,7 +124,6 @@
   .imagesGrid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
 }
 
-/* ✅ Стили для загрузки изображений */
 .uploadLabel {
   display: inline-block;
   cursor: pointer;

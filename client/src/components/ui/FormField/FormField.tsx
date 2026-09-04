@@ -18,7 +18,7 @@ interface FormFieldProps {
   type?: 'text' | 'password' | 'email';
   rows?: number;
   className?: string;
-  disabled?: boolean; // ← Добавлено
+  disabled?: boolean;
 }
 
 export const FormField = forwardRef<HTMLInputElement | HTMLTextAreaElement, FormFieldProps>(
@@ -39,7 +39,7 @@ export const FormField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Form
       minLength,
       required,
       autoComplete,
-      disabled, // ← Пробрасываем disabled
+      disabled,
       className: `${styles.fieldInput} ${hasError ? styles.stateError : ''} ${isValid ? styles.stateValid : ''} ${disabled ? styles.disabled : ''}`,
       ref,
     };

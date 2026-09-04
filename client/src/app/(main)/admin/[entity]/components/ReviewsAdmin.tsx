@@ -69,7 +69,6 @@ export function ReviewsAdmin() {
       const { data } = await api.get('/ratings/admin', { params });
       let reviewsData = data.data || [];
       
-      // ✅ Клиентская сортировка для status
       if (sortField === 'status' && sortOrder) {
         const multiplier = sortOrder === 'asc' ? 1 : -1;
         reviewsData = [...reviewsData].sort((a: Review, b: Review) => {
@@ -110,7 +109,7 @@ export function ReviewsAdmin() {
     setSubmittingReviewId(reviewId);
     try {
       await api.patch(`/ratings/${reviewId}/toggle`, { hidden: !currentHidden });
-      // Обновляем локально
+
       setReviews(prev => prev.map(r => 
         r.id === reviewId ? { ...r, hidden: !currentHidden } : r
       ));
@@ -154,7 +153,6 @@ export function ReviewsAdmin() {
         <h1>Управление отзывами</h1>
       </div>
 
-      {/* ✅ Фильтры и поиск */}
       <div className={styles.filters}>
         <input placeholder="Поиск по email автора..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className={styles.search} />
         <CustomSelect 
@@ -168,7 +166,6 @@ export function ReviewsAdmin() {
         />
       </div>
 
-      {/* ✅ Таблица отзывов */}
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>

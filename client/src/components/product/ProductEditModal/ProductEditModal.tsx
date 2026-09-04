@@ -108,7 +108,6 @@ export function ProductEditModal({ isOpen, onClose, device, onSave }: ProductEdi
   };
   const removeDeviceInfo = (index: number) => setDeviceInfos(prev => prev.filter((_, i) => i !== index));
 
-  // ✅ Загрузка основного изображения
   const handleMainImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -122,7 +121,6 @@ export function ProductEditModal({ isOpen, onClose, device, onSave }: ProductEdi
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       
-      // Обновляем formData и UI
       setFormData(prev => ({ ...prev, img: data.img }));
       toast.success('Основное изображение обновлено');
     } catch (err: any) {
@@ -133,7 +131,6 @@ export function ProductEditModal({ isOpen, onClose, device, onSave }: ProductEdi
     }
   };
 
-  // ✅ Загрузка доп. изображения
   const handleExtraImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -157,7 +154,6 @@ export function ProductEditModal({ isOpen, onClose, device, onSave }: ProductEdi
     }
   };
 
-  // ✅ Удаление доп. изображения
   const deleteExtraImage = async (imageId: number) => {
     try {
       await api.delete(`/devices/${device.id}/images/${imageId}`);
@@ -211,7 +207,6 @@ export function ProductEditModal({ isOpen, onClose, device, onSave }: ProductEdi
     setLoading(true);
 
     try {
-      // 1. Валидация скидок
       const discountError = validateDiscounts(discounts);
       if (discountError) {
         setValidationError(discountError);
@@ -230,7 +225,6 @@ export function ProductEditModal({ isOpen, onClose, device, onSave }: ProductEdi
         return;
       }
 
-      // 2. Валидация характеристик
       const hasIncompleteInfos = deviceInfos.some(info => 
         (info.title.trim() !== '' && info.description.trim() === '') || 
         (info.title.trim() === '' && info.description.trim() !== '')
@@ -242,7 +236,6 @@ export function ProductEditModal({ isOpen, onClose, device, onSave }: ProductEdi
         return;
       }
 
-      // 3. Подготовка данных товара
       const payloadDeviceInfos = deviceInfos
         .filter(info => info.title.trim() !== '' && info.description.trim() !== '')
         .map(info => ({ title: info.title.trim(), description: info.description.trim() }));
@@ -263,17 +256,13 @@ export function ProductEditModal({ isOpen, onClose, device, onSave }: ProductEdi
         deviceInfos: payloadDeviceInfos 
       };
 
-      // ✅ 4. РАЗДЕЛЕНИЕ: POST для создания, PATCH для обновления
       let deviceId: number;
       
       if (device?.id) {
-        // === ОБНОВЛЕНИЕ существующего товара ===
         
-        // 4a. Обновляем основной товар
         await api.patch(`/devices/${device.id}`, mainData);
         deviceId = device.id;
         
-        // 4b. Обрабатываем скидки (последовательно)
         const toDelete = discounts.filter(d => d._deleted && d.id);
         for (const d of toDelete) await api.delete(`/discounts/${d.id}`);
 
@@ -297,13 +286,10 @@ export function ProductEditModal({ isOpen, onClose, device, onSave }: ProductEdi
         }
         
       } else {
-        // === СОЗДАНИЕ нового товара ===
-        
-        // 4a. Создаём товар и получаем ответ с id
+
         const { data: createdDevice } = await api.post('/devices', mainData);
         deviceId = createdDevice.id;
         
-        // 4b. Создаём скидки для нового товара (только новые, удалять/обновлять нечего)
         const toCreate = discounts.filter(d => !d._deleted && d.dateStart && d.dateEnd && d.value > 0);
         for (const d of toCreate) {
           await api.post('/discounts', {
@@ -315,12 +301,10 @@ export function ProductEditModal({ isOpen, onClose, device, onSave }: ProductEdi
         }
       }
 
-      // ✅ 5. Загружаем свежие данные с сервера после всех изменений
       const { data: freshDevice } = await api.get(`/devices/${deviceId}`);
 
       toast.success(device?.id ? 'Товар обновлён' : 'Товар создан');
       
-      // ✅ Передаём СВЕЖИЕ данные в родительский компонент
       onSave(freshDevice);
       onClose();
 
@@ -379,7 +363,6 @@ export function ProductEditModal({ isOpen, onClose, device, onSave }: ProductEdi
                 </div>
               </div>
               
-              {/* ✅ Основное изображение: загрузка файла + текстовый путь */}
               <div className={styles.formGroup}>
                 <label>Основное изображение</label>
                 <div className={styles.imagePreview}>
@@ -390,7 +373,6 @@ export function ProductEditModal({ isOpen, onClose, device, onSave }: ProductEdi
                   )}
                 </div>
                 
-                {/* Кнопка загрузки файла */}
                 <label className={styles.uploadLabel}>
                   <input 
                     ref={mainImageInputRef}
@@ -405,7 +387,6 @@ export function ProductEditModal({ isOpen, onClose, device, onSave }: ProductEdi
                   </span>
                 </label>
                 
-                {/* Текстовое поле для ручного ввода пути (опционально) */}
                 <input 
                   type="text" 
                   value={formData.img} 
@@ -439,7 +420,6 @@ export function ProductEditModal({ isOpen, onClose, device, onSave }: ProductEdi
 
           {activeTab === 'images' && (
           <div className={styles.tabContent}>
-            {/* ✅ Загрузка доп. изображений */}
             <div className={styles.uploadSection}>
               <label className={styles.uploadLabel}>
                 <input 
@@ -457,7 +437,6 @@ export function ProductEditModal({ isOpen, onClose, device, onSave }: ProductEdi
             </div>
             
             {extraImages.length === 0 ? <p className={styles.empty}>Нет дополнительных изображений</p> : (
-              // ✅ Ключ для принудительного ре-рендера при изменении количества изображений
               <div className={styles.imagesGrid} key={extraImages.length}>
                 {extraImages.map((img) => (
                   <div key={img.id} className={styles.imageCard}>

@@ -44,8 +44,8 @@ export function StatsTab() {
   const [filterEntity, setFilterEntity] = useState<string>('all');
   const [types, setTypes] = useState<any[]>([]);
   const [brands, setBrands] = useState<any[]>([]);
-  const [deliveryOptions, setDeliveryOptions] = useState<any[]>([]); // ✅ Список вариантов доставки
-  const [deliveryFilter, setDeliveryFilter] = useState<string>('all'); // ✅ Фильтр по доставке для графика
+  const [deliveryOptions, setDeliveryOptions] = useState<any[]>([]);
+  const [deliveryFilter, setDeliveryFilter] = useState<string>('all');
 
   const [datePreset, setDatePreset] = useState<DatePreset>('month');
   const [dateRange, setDateRange] = useState(() => getDateRange('month'));
@@ -57,7 +57,6 @@ export function StatsTab() {
 
   const { start: startDate, end: endDate } = dateRange;
 
-  // ✅ Загрузка справочников (типы, бренды, варианты доставки)
   useEffect(() => {
     const loadRefs = async () => {
       try {
@@ -120,7 +119,7 @@ export function StatsTab() {
         'by-brand': '/basket/admin/stats/by-brand',
         'by-users': '/basket/admin/stats/by-users',
         'by-orders': '/basket/admin/stats/by-orders',
-        'by-delivery': '/basket/admin/stats/by-delivery' // ✅ Новый эндпоинт
+        'by-delivery': '/basket/admin/stats/by-delivery'
       };
       
       const params: any = {};
@@ -147,7 +146,6 @@ export function StatsTab() {
   const loadTimelineData = async () => {
     setTimelineLoading(true);
     try {
-      // ✅ Для by-delivery используем отдельный эндпоинт
       if (statsView === 'by-delivery') {
         const params: any = {};
         if (startDate && endDate) {
@@ -169,7 +167,7 @@ export function StatsTab() {
         'by-brand': 'brands',
         'by-users': 'users',
         'by-orders': 'orders',
-        'by-delivery': 'orders' // не используется
+        'by-delivery': 'orders'
       };
       
       const apiType = typeMap[statsView];
@@ -255,7 +253,7 @@ export function StatsTab() {
   };
 
   const showEntityFilter = statsView === 'by-type' || statsView === 'by-brand';
-  const showDeliveryFilter = statsView === 'by-delivery'; // ✅ Показывать фильтр доставки только для by-delivery
+  const showDeliveryFilter = statsView === 'by-delivery';
 
   const handleGenerateReport = async () => {
     if (!summary) {
@@ -321,7 +319,7 @@ export function StatsTab() {
               { value: 'by-brand', label: 'По брендам' },
               { value: 'by-users', label: 'По пользователям' },
               { value: 'by-orders', label: 'По заказам' },
-              { value: 'by-delivery', label: 'По доставкам' } // ✅ Новая опция
+              { value: 'by-delivery', label: 'По доставкам' }
             ]}
             value={statsView}
             onChange={(val) => setStatsView(val as StatsView)}
@@ -369,7 +367,6 @@ export function StatsTab() {
           </div>
         )}
 
-        {/* ✅ Фильтр по способу доставки для графика */}
         {showDeliveryFilter && (
           <div className={styles.controlGroup}>
             <label>Тип доставки:</label>

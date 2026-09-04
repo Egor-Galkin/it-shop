@@ -87,7 +87,6 @@
   &:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 
-/* ✅ Пагинация */
 .paginationWrapper {
   position: sticky; bottom: 1.5rem; z-index: 45; margin-top: auto;
   width: calc(100% - 2rem); max-width: 400px; display: grid; grid-template-columns: auto 1fr auto; align-items: center;
@@ -114,7 +113,6 @@
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* ✅ Адаптив */
 @media (max-width: 768px) {
   .filters { grid-template-columns: 1fr; }
   .search { grid-column: auto; }
@@ -130,7 +128,6 @@
   .pageBtn { padding: 0.3rem 0.7rem; font-size: 0.8rem; }
 }
 
-/* ✅ Столбец действий */
 .actionsHeader { 
   text-align: right !important; 
   padding-right: 1.5rem;
@@ -141,7 +138,6 @@
   padding-right: 1rem;
 }
 
-/* Адаптив для кнопки действий */
 @media (max-width: 768px) {
   .actionsCell {
     text-align: center !important;

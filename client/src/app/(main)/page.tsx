@@ -5,7 +5,6 @@ import { Slider } from '@/components/home/Slider/Slider';
 import styles from './page.module.scss';
 import { ScrollToTop } from '@/components/ui/ScrollToTop/ScrollToTop';
 
-// Данные для преимуществ (без эмодзи, с заглушками)
 const advantages = [
   { 
     title: 'Официальная гарантия', 
@@ -29,7 +28,6 @@ const advantages = [
   },
 ];
 
-// Категории товаров
 const categories = [
   { name: 'Смартфоны', icon: '/display.svg', href: '/catalog?typeId=1' },
   { name: 'Ноутбуки', icon: '/display.svg', href: '/catalog?typeId=2' },
@@ -37,7 +35,6 @@ const categories = [
   { name: 'Аксессуары', icon: '/display.svg', href: '/catalog?typeId=4' },
 ];
 
-// Статистика
 const stats = [
   { value: '50K+', label: 'Довольных клиентов' },
   { value: '10K+', label: 'Товаров в каталоге' },
@@ -55,10 +52,8 @@ export default function HomePage() {
 
   return (
     <div className={styles.home}>
-      {/* 🔹 Слайдер */}
       <Slider />
 
-      {/* 🔹 О магазине */}
       <section className={`${styles.info} ${isLoaded ? styles.animate : ''}`} style={{ animationDelay: '0.6s' }}>
         <h2 className={styles.infoTitle}>О магазине</h2>
         <p className={styles.infoText}>ITshop специализируется на продаже сертифицированной электроники. Мы работаем напрямую с поставщиками, чтобы предложить лучшие цены и официальную гарантию на каждый товар.</p>
@@ -78,7 +73,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 🔹 Категории товаров */}
       <section className={`${styles.categories} ${isLoaded ? styles.animate : ''}`} style={{ animationDelay: '0.4s' }}>
         <h2 className={styles.sectionTitle}>Популярные категории</h2>
         <div className={styles.categoriesGrid}>
@@ -93,7 +87,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 🔹 Статистика доверия */}
       <section className={`${styles.stats} ${isLoaded ? styles.animate : ''}`} style={{ animationDelay: '0.8s' }}>
         <div className={styles.statsGrid}>
           {stats.map((stat, i) => (
@@ -105,7 +98,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 🔹 Призыв к действию (CTA) */}
       <section className={`${styles.cta} ${isLoaded ? styles.animate : ''}`} style={{ animationDelay: '1s' }}>
         <div className={styles.ctaContent}>
           <h2>Готовы к обновлению?</h2>
@@ -114,7 +106,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 🔹 Преимущества (шахматный порядок) */}
       <section className={`${styles.advantages} ${isLoaded ? styles.animate : ''}`} style={{ animationDelay: '0.2s' }}>
         <h2 className={styles.sectionTitle}>Почему выбирают нас</h2>
         <div className={styles.advantagesList}>
@@ -136,7 +127,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 🔹 Партнёры */}
       <section className={`${styles.partners} ${isLoaded ? styles.animate : ''}`} style={{ animationDelay: '1.2s' }}>
         <h2 className={styles.partnersTitle}>Официальные партнёры</h2>
         <div className={styles.partnersGrid}>
@@ -146,7 +136,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 🔹 Кнопка поднятия наверх (появляется при скролле) */}
       <ScrollToTop />
 
     </div>

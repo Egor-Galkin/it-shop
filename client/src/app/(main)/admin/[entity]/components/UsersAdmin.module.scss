@@ -98,7 +98,6 @@
   display: inline-block; padding: 0.2rem 0.5rem; background: var(--color-background); border-radius: 0.3rem; font-size: 0.8rem; 
 }
 
-/* ✅ Квадратные блоки для заказов */
 .orderCounts {
   display: inline-flex;
   gap: 0.4rem;
@@ -135,7 +134,6 @@
 
 .tabContent { min-height: 200px; }
 
-/* Отзывы */
 .reviewsSection { h4 { margin: 0 0 0.75rem; font-size: 1rem; color: var(--color-text); font-weight: 600; } }
 .reviewsList { 
   display: flex; flex-direction: column; gap: 0.5rem; max-height: 300px; overflow-y: auto; padding-right: 0.25rem;
@@ -159,7 +157,6 @@
   &:hover { border-color: var(--color-primary); color: var(--color-primary); }
 }
 
-/* ✅ Заказы - улучшенные карточки */
 .ordersSection { h4 { margin: 0 0 0.75rem; font-size: 1rem; color: var(--color-text); font-weight: 600; } }
 .ordersList { 
   display: flex; flex-direction: column; gap: 1rem; max-height: 500px; overflow-y: auto; padding-right: 0.25rem;
@@ -216,7 +213,6 @@
   }
 }
 
-/* Таблица товаров в заказе */
 .orderTableWrapper {
   overflow-x: auto;
   border-radius: 0.4rem;
@@ -303,7 +299,6 @@
   color: var(--color-text);
 }
 
-/* Футер заказа */
 .orderFooter {
   display: flex;
   justify-content: space-between;
@@ -348,7 +343,6 @@
 
 .emptySmall { color: var(--color-text-muted); font-size: 0.85rem; margin: 0; font-style: italic; }
 
-/* Пагинация */
 .paginationWrapper {
   position: sticky; bottom: 1.5rem; z-index: 45; margin-top: auto;
   width: calc(100% - 2rem); max-width: 400px; display: grid; grid-template-columns: auto 1fr auto; align-items: center;
@@ -373,7 +367,6 @@
 }
 .pageInfo { color: var(--color-text); font-size: 0.85rem; font-weight: 500; min-width: 70px; text-align: center; }
 
-/* ✅ Информация о способе получения */
 .deliveryInfo {
   padding: 0.75rem;
   background: var(--color-surface-hover);
@@ -399,7 +392,7 @@
 .deliveryPrice,
 .deliveryAddress {
   color: var(--color-text-muted);
-  padding-left: 1.6rem; /* Отступ под иконку */
+  padding-left: 1.6rem;
   
   strong {
     color: var(--color-text);
@@ -407,7 +400,6 @@
   }
 }
 
-/* ✅ Адаптив для доставки */
 @media (max-width: 768px) {
   .deliveryInfo {
     font-size: 0.8rem;
@@ -422,7 +414,6 @@
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* Адаптив */
 @media (max-width: 768px) {
   .filters { grid-template-columns: 1fr; gap: 0.5rem; }
   .search { grid-column: auto; }
@@ -456,7 +447,6 @@
   .pageBtn { padding: 0.3rem 0.7rem; font-size: 0.8rem; }
 }
 
-/* ✅ Информация о доставке в шапке заказа */
 .deliveryInfo {
   display: inline-flex;
   align-items: center;
@@ -465,7 +455,6 @@
   color: var(--color-text);
 }
 
-/* ✅ Адаптив для шапки заказа */
 @media (max-width: 768px) {
   .orderHeader {
     grid-template-columns: 1fr auto;

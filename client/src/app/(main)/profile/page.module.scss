@@ -1,4 +1,3 @@
-/* ───────── ОСНОВНЫЕ СТИЛИ ───────── */
 .profile {
   min-height: calc(100vh - 200px);
   padding: 2rem 1rem;
@@ -20,7 +19,6 @@
   text-align: center;
 }
 
-/* ───────── ВКЛАДКИ ───────── */
 .tabs {
   display: flex;
   gap: 0.5rem;
@@ -57,7 +55,6 @@
   }
 }
 
-/* ───────── ОБЩИЕ СТИЛИ КАРТОЧЕК ───────── */
 .card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -81,7 +78,6 @@
   color: var(--color-error); 
 }
 
-/* ──────── СЕТКА ТОВАРОВ ───────── */
 .gridHead {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr auto;
@@ -159,7 +155,6 @@
   min-width: 20px; 
 }
 
-/* ✅ Обновлённый .price — поддерживает несколько строк для скидки */
 .price { 
   text-align: right; 
   display: flex;
@@ -323,7 +318,6 @@
   gap: 0.5rem; 
 }
 
-/* ───────── ФОРМА ПАРОЛЯ ───────── */
 .formTitle { 
   margin: 0 0 1.5rem; 
   font-size: 1.25rem; 
@@ -394,7 +388,6 @@
   min-width: 200px; 
 }
 
-/* ───────── АДМИН: УПРАВЛЕНИЕ ───────── */
 .managementGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -448,7 +441,6 @@
   }
 }
 
-/* ───────── АДМИН: СТАТИСТИКА ───────── */
 .statsContainer {
   display: flex; 
   flex-direction: column; 
@@ -611,7 +603,6 @@
   overflow: visible;
 }
 
-/* ───────── АДАПТИВ ─────── */
 @media (max-width: 768px) {
   .gridHead, .row { 
     grid-template-columns: 1.5fr 0.8fr 0.8fr 1fr auto; 
@@ -652,7 +643,6 @@
     min-height: 300px; 
   }
   
-  /* ✅ Адаптив для цен со скидкой */
   .price.priceWithDiscount {
     flex-direction: row;
     align-items: center;
@@ -689,7 +679,6 @@
   }
 }
 
-/* ✅ Выбор доставки в корзине */
 .deliverySelect {
   display: flex;
   align-items: center;
@@ -751,7 +740,6 @@
   }
 }
 
-/* ✅ Информация о доставке в истории заказов */
 .orderHeader {
   display: flex;
   align-items: center;
@@ -789,7 +777,6 @@
   font-weight: 500;
 }
 
-/* ✅ Адаптив */
 @media (max-width: 768px) {
   .footer {
     flex-direction: column;
@@ -818,7 +805,6 @@
   }
 }
 
-/* ✅ Контейнер для CustomSelect с поддержкой disabled-состояния */
 .deliverySelectContainer {
   display: inline-block;
   transition: opacity 0.2s;
@@ -830,12 +816,10 @@
   }
 }
 
-/* ✅ Стили для самого CustomSelect */
 .deliveryCustomSelect {
   min-width: 200px;
 }
 
-/* ✅ Глобальные стили переопределения компонента (ВЫНЕСЕНЫ НА ВЕРХНИЙ УРОВЕНЬ!) */
 
 :global(.custom-select) {
   background: var(--color-background);
@@ -872,19 +856,16 @@
   }
 }
 
-/* ✅ Активная опция — полный селектор без вложенности */
 :global(.custom-select__option--is-selected) {
   background: var(--color-primary);
   color: white;
 }
 
-/* ✅ Disabled опция */
 :global(.custom-select__option:disabled) {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* ✅ Новый футер: левая и правая части */
 .footer {
   display: flex;
   justify-content: space-between;
@@ -911,7 +892,6 @@
   gap: 0.75rem;
 }
 
-/* ✅ Адаптив для нового футера */
 @media (max-width: 768px) {
   .footer {
     flex-direction: column;
@@ -940,17 +920,14 @@
   }
 }
 
-/* ✅ Статус доставки в истории (• и + вместо эмодзи) */
 .deliveryStatus {
   font-size: 0.85rem;
   font-weight: 500;
   
-  /* Цвет для ожидающих статусов */
   &:has([data-status="pending"]) {
     color: var(--color-text-muted);
   }
   
-  /* Цвет для завершённых статусов */
   &:has([data-status="completed"]) {
     color: var(--color-success);
   }
@@ -999,9 +976,8 @@
   }
 }
 
-/* ✅ Кнопка "Отчёт" — прижата вправо */
 .reportBtn {
-  margin-left: auto; /* ✅ Прижимаем к правому краю */
+  margin-left: auto;
   background: var(--color-primary);
   color: white;
   border: none;
@@ -1032,7 +1008,6 @@
   }
 }
 
-/* ✅ Адаптив для кнопки отчёта */
 @media (max-width: 768px) {
   .statsControls {
     flex-direction: column;

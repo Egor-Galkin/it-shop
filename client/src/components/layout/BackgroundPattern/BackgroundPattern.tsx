@@ -1,9 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation'; // ✅ Добавил только этот импорт
+import { usePathname } from 'next/navigation';
 import styles from './BackgroundPattern.module.scss';
 
-// ✅ Добавил список исключений
 const EXCLUDED_PATHS = [
   '/profile',
   '/admin/devices',
@@ -16,7 +15,7 @@ const EXCLUDED_PATHS = [
 ];
 
 export function BackgroundPattern() {
-  const pathname = usePathname(); // ✅ Добавил только этот хук
+  const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -44,9 +43,6 @@ export function BackgroundPattern() {
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // ✅ Проверка исключений — после всех хуков, чтобы не ломать Rules of Hooks
-  //const isExcluded = EXCLUDED_PATHS.some(path => pathname?.startsWith(path));
 
   const isExactExcluded = EXCLUDED_PATHS.some(path => pathname === path);
   const isProductPage = /^\/catalog\/\d+$/.test(pathname || '');

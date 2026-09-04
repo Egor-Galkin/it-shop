@@ -9,7 +9,7 @@ interface DatePickerProps {
   minDate?: string;
   maxDate?: string;
   className?: string;
-  disabled?: boolean; // ✅ Добавлено
+  disabled?: boolean;
 }
 
 export function DatePicker({ 
@@ -19,7 +19,7 @@ export function DatePicker({
   minDate, 
   maxDate, 
   className = '',
-  disabled = false // ✅ Добавлено
+  disabled = false
 }: DatePickerProps) {
   const [localValue, setLocalValue] = useState(value);
 
@@ -42,7 +42,7 @@ export function DatePicker({
         onChange={handleChange}
         min={minDate}
         max={maxDate}
-        disabled={disabled} // ✅ Пробрасываем disabled
+        disabled={disabled}
         className={`${styles.input} ${disabled ? styles.disabled : ''}`}
       />
     </div>

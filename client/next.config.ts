@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   // Пустой конфиг для Turbopack (отключает ошибку)
   turbopack: {},
   
-  // Webpack конфиг оставляем для совместимости
+  // Webpack конфиг оставлен для совместимости
   webpack: (config) => {
     config.externals = [...(config.externals || []), 'canvas'];
     return config;

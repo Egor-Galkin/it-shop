@@ -39,12 +39,10 @@ export function FloatingCart() {
     [cartItems]
   );
 
-  // ✅ Инициализация на клиенте
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  // ✅ Загрузка опций доставки и расчёт стоимости
   useEffect(() => {
     if (!isOpen || !isClient) return;
     
@@ -53,7 +51,6 @@ export function FloatingCart() {
         const { data } = await api.get('/delivery-options/client/available');
         setDeliveryOptions(data);
         
-        // ✅ Рассчитываем стоимость доставки для текущего выбора
         const selected = data.find((o: any) => o.id === cartDeliveryOptionId);
         setDeliveryCost(selected?.type === 'DELIVERY' && selected.price 
           ? Number(selected.price) 
@@ -66,7 +63,6 @@ export function FloatingCart() {
     loadOptions();
   }, [isOpen, isClient, cartDeliveryOptionId]);
 
-  // ✅ Закрытие при клике вне
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -81,7 +77,6 @@ export function FloatingCart() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
 
-  // ✅ Расчёт итого: товары + доставка (мемоизировано)
   const cartTotal = useMemo(() => {
     return itemsTotal + deliveryCost;
   }, [itemsTotal, deliveryCost]);
@@ -99,7 +94,6 @@ export function FloatingCart() {
     }
   }, [isOpen, isClient]);
 
-  // ✅ Изменение количества — БЕЗ fetchCart() для предотвращения мерцания
   const changeQty = useCallback(async (itemId: number, newQty: number) => {
     if (newQty < 1) return;
     try {
@@ -109,7 +103,6 @@ export function FloatingCart() {
     }
   }, [dispatch]);
 
-  // ✅ Удаление товара
   const removeItem = useCallback(async (id: number) => {
     const ok = await showConfirm({ 
       title: 'Удалить товар?', 
@@ -124,11 +117,9 @@ export function FloatingCart() {
     }
   }, [dispatch, showConfirm]);
 
-  // ✅ Выбор доставки через нативный select
   const handleDeliveryChange = useCallback(async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const optionId = e.target.value ? Number(e.target.value) : null;
     
-    // ✅ Обновляем стоимость доставки локально для мгновенного отклика
     const selected = deliveryOptions.find(o => o.id === optionId);
     setDeliveryCost(selected?.type === 'DELIVERY' && selected.price 
       ? Number(selected.price) 
@@ -143,7 +134,6 @@ export function FloatingCart() {
     }
   }, [deliveryOptions, dispatch]);
 
-  // ✅ Оформление заказа — без редиректа
   const handleCheckout = useCallback(async () => {
     if (!cartDeliveryOptionId) {
       toast.error('Выберите способ получения');
@@ -153,19 +143,15 @@ export function FloatingCart() {
     try {
       await dispatch(checkoutCart()).unwrap();
       toast.success('Заказ успешно оформлен!');
-      // ✅ Просто закрываем меню, без редиректа
       setIsOpen(false);
-      // ✅ Опционально: обновляем корзину для сброса состояния
       dispatch(fetchCart());
     } catch (e: any) {
       toast.error(e.message || 'Ошибка оформления');
     }
   }, [cartDeliveryOptionId, dispatch]);
 
-  // ✅ Валидация: можно ли оформить заказ
   const canCheckout = itemsCount > 0 && cartDeliveryOptionId !== null && !cartLoading;
 
-  // ✅ Рендер только на клиенте + авторизация
   if (!isClient || !user) return null;
 
   return (
@@ -217,7 +203,6 @@ export function FloatingCart() {
                 {cartItems.length > 5 && <p className={styles.moreItems}>+ ещё {cartItems.length - 5} товаров</p>}
               </div>
 
-              {/* ✅ Нативный стилизованный select для доставки */}
               <div className={styles.deliverySelectWrapper}>
                 <select 
                   value={cartDeliveryOptionId ?? ''} 
