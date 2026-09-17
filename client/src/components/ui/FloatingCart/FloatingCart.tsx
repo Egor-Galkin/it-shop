@@ -152,7 +152,7 @@ export function FloatingCart() {
 
   const canCheckout = itemsCount > 0 && cartDeliveryOptionId !== null && !cartLoading;
 
-  if (!isClient || !user) return null;
+  if (!isClient || !user || user.role === 'ADMIN') return null;
 
   return (
     <div className={styles.floatingCart} ref={menuRef}>
