@@ -74,20 +74,21 @@ export function ProductReviews({ reviews, deviceId, user, isAdmin, onUpdate }: P
     setReviewLoading(true);
     setReviewMsg(null);
     try {
+      let response;
       if (myReview) {
-        await api.patch(`/ratings/${myReview.id}`, reviewForm);
+        response = await api.patch(`/ratings/${myReview.id}`, reviewForm);
         setReviewMsg({ type: 'success', text: 'Отзыв успешно обновлён!' });
       } else {
-        await api.post('/ratings', { ...reviewForm, deviceId });
+        response = await api.post('/ratings', { ...reviewForm, deviceId });
         setReviewMsg({ type: 'success', text: 'Отзыв успешно добавлен!' });
       }
       
+      const updatedReview = response.data || response;
+      setMyReview(updatedReview);
+      setReviewForm({ rate: updatedReview.rate, description: updatedReview.description || '' });
+      
       await onUpdate();
-      const updatedMine = reviews.find((r: any) => r.userId === user?.id);
-      if (updatedMine) {
-        setMyReview(updatedMine);
-        setReviewForm({ rate: updatedMine.rate, description: updatedMine.description || '' });
-      }
+      
       setReviewTouched(false);
       setReviewError('');
     } catch (err: any) {
