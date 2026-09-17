@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Slider } from '@/components/home/Slider/Slider';
 import styles from './page.module.scss';
 import { ScrollToTop } from '@/components/ui/ScrollToTop/ScrollToTop';
@@ -44,11 +45,16 @@ const stats = [
 
 export default function HomePage() {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 100);
     return () => clearTimeout(timer);
   }, []);
+
+  const handleImageLoad = (src: string) => {
+    setLoadedImages(prev => ({ ...prev, [src]: true }));
+  };
 
   return (
     <div className={styles.home}>
@@ -79,7 +85,13 @@ export default function HomePage() {
           {categories.map((cat, i) => (
             <Link key={i} href={cat.href} className={styles.categoryCard}>
               <div className={styles.catIcon}>
-                <img src={cat.icon} alt={cat.name} />
+                <Image 
+                  src={cat.icon} 
+                  alt={cat.name}
+                  width={50}
+                  height={50}
+                  placeholder="empty"
+                />
               </div>
               <span className={styles.catName}>{cat.name}</span>
             </Link>
@@ -109,21 +121,39 @@ export default function HomePage() {
       <section className={`${styles.advantages} ${isLoaded ? styles.animate : ''}`} style={{ animationDelay: '0.2s' }}>
         <h2 className={styles.sectionTitle}>Почему выбирают нас</h2>
         <div className={styles.advantagesList}>
-          {advantages.map((adv, i) => (
-            <div 
-              key={i} 
-              className={`${styles.advantageBlock} ${i % 2 === 1 ? styles.reverse : ''}`}
-            >
-              <div className={styles.advContent}>
-                <h3 className={styles.advTitle}>{adv.title}</h3>
-                <div className={styles.advDivider} />
-                <p className={styles.advDesc}>{adv.desc}</p>
+          {advantages.map((adv, i) => {
+            const isImageLoaded = loadedImages[adv.image];
+            return (
+              <div 
+                key={i} 
+                className={`${styles.advantageBlock} ${i % 2 === 1 ? styles.reverse : ''}`}
+              >
+                <div className={styles.advContent}>
+                  <h3 className={styles.advTitle}>{adv.title}</h3>
+                  <div className={styles.advDivider} />
+                  <p className={styles.advDesc}>{adv.desc}</p>
+                </div>
+                <div className={styles.advImage}>
+                  <Image 
+                    src={adv.image} 
+                    alt={adv.title}
+                    fill
+                    sizes="(max-width: 900px) 100vw, 50vw"
+                    placeholder="empty"
+                    style={{ 
+                      objectFit: 'cover',
+                      opacity: isImageLoaded ? 1 : 0,
+                      transition: 'opacity 0.3s ease-in-out'
+                    }}
+                    onLoadingComplete={() => handleImageLoad(adv.image)}
+                  />
+                  {!isImageLoaded && (
+                    <div className={styles.imagePlaceholder} />
+                  )}
+                </div>
               </div>
-              <div className={styles.advImage}>
-                <img src={adv.image} alt={adv.title} />
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 

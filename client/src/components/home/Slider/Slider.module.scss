@@ -15,11 +15,26 @@
 }
 
 .slideBg {
-  position: absolute; inset: 0;
-  background-size: cover;
-  background-position: center;
-  transition: background-image 0.5s ease-in-out;
+  position: absolute; 
+  inset: 0;
   z-index: 1;
+  
+  img {
+    border-radius: inherit;
+  }
+}
+
+.slidePlaceholder {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-surface) 100%);
+  z-index: 1;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
 }
 
 .slideOverlay {

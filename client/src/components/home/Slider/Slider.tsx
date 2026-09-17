@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from './Slider.module.scss';
 
 const slides = [
@@ -24,6 +25,7 @@ const slides = [
 export function Slider() {
   const [current, setCurrent] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [loadedSlides, setLoadedSlides] = useState<Record<number, boolean>>({});
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const startTimer = () => {
@@ -52,9 +54,31 @@ export function Slider() {
   const prevSlide = () => goToSlide(current - 1);
   const nextSlide = () => goToSlide(current + 1);
 
+  const handleImageLoad = (index: number) => {
+    setLoadedSlides(prev => ({ ...prev, [index]: true }));
+  };
+
   return (
     <section className={`${styles.slider} ${styles.animate}`}>
-      <div className={styles.slideBg} style={{ backgroundImage: `url(${slides[current].bg})` }} />
+      <div className={styles.slideBg}>
+        <Image 
+          src={slides[current].bg} 
+          alt={slides[current].title}
+          fill
+          sizes="100vw"
+          placeholder="empty"
+          priority={current === 0}
+          style={{ 
+            objectFit: 'cover',
+            opacity: loadedSlides[current] ? 1 : 0,
+            transition: 'opacity 0.3s ease-in-out'
+          }}
+          onLoadingComplete={() => handleImageLoad(current)}
+        />
+        {!loadedSlides[current] && (
+          <div className={styles.slidePlaceholder} />
+        )}
+      </div>
       <div className={styles.slideOverlay} />
 
       <div className={styles.slideContent}>
